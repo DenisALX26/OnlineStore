@@ -1,0 +1,21 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: my_mysql_db_asp_dotnet
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: onlinestoredb
+      MYSQL_USER: storeuser
+      MYSQL_PASSWORD: storeuserpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - asp_dotnet_project:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-prootpass"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  asp_dotnet_project:
