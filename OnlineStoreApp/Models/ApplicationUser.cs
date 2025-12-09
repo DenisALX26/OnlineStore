@@ -4,5 +4,5 @@ namespace OnlineStoreApp.Models;
 
 public class ApplicationUser : IdentityUser
 {
-
+    public required virtual Wishlist Wishlist { get; set; } = new Wishlist();
 }

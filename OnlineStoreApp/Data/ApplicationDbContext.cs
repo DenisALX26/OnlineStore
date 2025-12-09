@@ -10,6 +10,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         : base(options)
     {
     }
+    public DbSet<Wishlist> Wishlists { get; set; }
+    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -25,7 +27,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                     if (maxLength == null)
                     {
                         // Set default max length for string primary keys and foreign keys
-                    if (property.IsKey() || property.IsForeignKey())
+                        if (property.IsKey() || property.IsForeignKey())
                         {
                             property.SetMaxLength(255);
                         }
@@ -33,5 +35,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 }
             }
         }
+
+        base.OnModelCreating(builder);
+
+        builder.Entity<ApplicationUser>().HasOne<Wishlist>(a => a.Wishlist)
+            .WithOne(b => b.User)
+            .HasForeignKey<Wishlist>(b => b.UserId);
     }
+
 }

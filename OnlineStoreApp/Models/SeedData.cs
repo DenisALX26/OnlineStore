@@ -54,7 +54,8 @@ public class SeedData
                     NormalizedEmail = "ADMIN@TEST.COM",
                     Email = "admin@test.com",
                     NormalizedUserName = "ADMIN@TEST.COM",
-                    PasswordHash = hasher.HashPassword(null, "Admin123!")
+                    PasswordHash = hasher.HashPassword(null, "Admin123!"),
+                    Wishlist = new Wishlist()
                 },
                 new ApplicationUser
                 {
@@ -64,7 +65,8 @@ public class SeedData
                     NormalizedEmail = "COLABORATOR@TEST.COM",
                     Email = "colaborator@test.com",
                     NormalizedUserName = "COLABORATOR@TEST.COM",
-                    PasswordHash = hasher.HashPassword(null, "Colaborator123!")
+                    PasswordHash = hasher.HashPassword(null, "Colaborator123!"),
+                    Wishlist = new Wishlist()
                 },
                 new ApplicationUser
                 {
@@ -74,7 +76,8 @@ public class SeedData
                     NormalizedEmail = "CUSTOMER@TEST.COM",
                     Email = "customer@test.com",
                     NormalizedUserName = "CUSTOMER@TEST.COM",
-                    PasswordHash = hasher.HashPassword(null, "Customer123!")
+                    PasswordHash = hasher.HashPassword(null, "Customer123!"),
+                    Wishlist = new Wishlist()
                 },
                 new ApplicationUser
                 {
@@ -84,7 +87,8 @@ public class SeedData
                     NormalizedEmail = "GUEST@TEST.COM",
                     Email = "guest@test.com",
                     NormalizedUserName = "GUEST@TEST.COM",
-                    PasswordHash = hasher.HashPassword(null, "Guest123!")
+                    PasswordHash = hasher.HashPassword(null, "Guest123!"),
+                    Wishlist = new Wishlist()
                 }
             );
 

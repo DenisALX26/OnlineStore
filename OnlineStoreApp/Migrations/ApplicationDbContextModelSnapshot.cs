@@ -230,6 +230,26 @@ namespace OnlineStoreApp.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("OnlineStoreApp.Models.Wishlist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Wishlists");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -278,6 +298,21 @@ namespace OnlineStoreApp.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("OnlineStoreApp.Models.Wishlist", b =>
+                {
+                    b.HasOne("OnlineStoreApp.Models.ApplicationUser", "User")
+                        .WithOne("Wishlist")
+                        .HasForeignKey("OnlineStoreApp.Models.Wishlist", "UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OnlineStoreApp.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Wishlist")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
