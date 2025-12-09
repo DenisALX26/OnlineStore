@@ -12,6 +12,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     }
     public DbSet<Wishlist> Wishlists { get; set; }
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+    public DbSet<Cart> Carts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -41,6 +42,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<ApplicationUser>().HasOne<Wishlist>(a => a.Wishlist)
             .WithOne(b => b.User)
             .HasForeignKey<Wishlist>(b => b.UserId);
+
+        base.OnModelCreating(builder);
+
+        builder.Entity<ApplicationUser>().HasOne<Cart>(a => a.Cart)
+            .WithOne(b => b.User)
+            .HasForeignKey<Cart>(b => b.UserId);
     }
 
 }

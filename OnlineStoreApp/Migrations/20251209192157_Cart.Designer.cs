@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineStoreApp.Data;
 
@@ -11,9 +12,11 @@ using OnlineStoreApp.Data;
 namespace OnlineStoreApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251209192157_Cart")]
+    partial class Cart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,29 +233,6 @@ namespace OnlineStoreApp.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("OnlineStoreApp.Models.Cart", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("TotalPrice")
-                        .HasColumnType("double");
-
-                    b.Property<string>("UserId")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Carts");
-                });
-
             modelBuilder.Entity("OnlineStoreApp.Models.Wishlist", b =>
                 {
                     b.Property<int>("Id")
@@ -324,15 +304,6 @@ namespace OnlineStoreApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OnlineStoreApp.Models.Cart", b =>
-                {
-                    b.HasOne("OnlineStoreApp.Models.ApplicationUser", "User")
-                        .WithOne("Cart")
-                        .HasForeignKey("OnlineStoreApp.Models.Cart", "UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("OnlineStoreApp.Models.Wishlist", b =>
                 {
                     b.HasOne("OnlineStoreApp.Models.ApplicationUser", "User")
@@ -344,9 +315,6 @@ namespace OnlineStoreApp.Migrations
 
             modelBuilder.Entity("OnlineStoreApp.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Cart")
-                        .IsRequired();
-
                     b.Navigation("Wishlist")
                         .IsRequired();
                 });
