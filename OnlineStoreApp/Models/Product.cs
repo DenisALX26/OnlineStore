@@ -12,6 +12,8 @@ namespace OnlineStoreApp.Models
         public double Price { get; set; }
         public double Rating { get; set; }
         public int Stock { get; set; }
+        public int? CategoryId { get; set; }
+        public Category? Category { get; set; }
 
     }
 }
