@@ -25,6 +25,8 @@ namespace OnlineStoreApp.Models
         public int? CategoryId { get; set; }
         public Category? Category { get; set; }
         public ICollection<Review>? Reviews { get; set; }   
+        public ICollection<WishlistProduct>? WishlistProducts { get; set; }
+        public ICollection<CartProduct>? CartProducts { get; set; }
 
     }
 }
