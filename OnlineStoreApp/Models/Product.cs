@@ -3,6 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineStoreApp.Models
 {
+    public enum Type
+    {
+        [Display(Name = "Left Foot")]
+        Left = 1,
+
+        [Display(Name = "Right Foot")]
+        Right = 2
+    }
     public class Product
     {
         [Key]
@@ -10,6 +18,8 @@ namespace OnlineStoreApp.Models
         public required string Title { get; set; }
         public required string Description { get; set; }
         public double Price { get; set; }
+        public Type Type { get; set; }
+        public string Image { get; set; } = string.Empty;
         public double Rating { get; set; }
         public int Stock { get; set; }
         public int? CategoryId { get; set; }
