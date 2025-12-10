@@ -90,6 +90,12 @@ namespace OnlineStoreApp.Controllers
             return RedirectToAction("Categories");
         }
 
+        public ActionResult Products()
+        {
+            var products = _db.Products.ToList();
+            return View(products);
+        }
+
         // GET: AdminController
         public ActionResult Index()
         {
