@@ -14,6 +14,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     public DbSet<Cart> Carts { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<Review> Reviews { get; set; }
     public DbSet<Product> Products { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -53,6 +54,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<Product>().HasOne<Category>(p => p.Category)
             .WithMany(c => c.Products)
             .HasForeignKey(p => p.CategoryId);
+
+        // M:1 For Review and Product
+        builder.Entity<Review>().HasOne<Product>(r => r.Product)
+            .WithMany(p => p.Reviews)
+            .HasForeignKey(r => r.ProductId);
 
     }
 
