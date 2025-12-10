@@ -15,6 +15,12 @@ namespace OnlineStoreApp.Controllers
             _db = db;
         }
 
+        public IActionResult Categories()
+        {
+            var categories = _db.Categories.ToList();
+            return View(categories);
+        }
+
         [HttpGet("create-category")]
         public IActionResult CreateCategory()
         {
@@ -32,8 +38,58 @@ namespace OnlineStoreApp.Controllers
             _db.Categories.Add(model);
             _db.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Categories");
         }
+
+        [HttpGet]
+        public IActionResult EditCategory(int id)
+        {
+            var category = _db.Categories.FirstOrDefault(c => c.Id == id);
+            if(category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+        }
+
+        [HttpPost]
+        public IActionResult EditCategory(Category category)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(category);
+            }
+
+            _db.Categories.Update(category);
+            _db.SaveChanges();
+
+            return RedirectToAction("Categories");
+        }
+
+        [HttpGet]
+        public IActionResult DeleteCategory(int id)
+        {
+            var category = _db.Categories.FirstOrDefault(c => c.Id == id);
+            if(category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteCategoryMethod(int id)
+        {
+            var category = _db.Categories.FirstOrDefault(c => c.Id == id);
+            if(category == null)
+            {
+                return NotFound();
+            }
+            _db.Categories.Remove(category);
+            _db.SaveChanges();
+            return RedirectToAction("Categories");
+        }
+
         // GET: AdminController
         public ActionResult Index()
         {
