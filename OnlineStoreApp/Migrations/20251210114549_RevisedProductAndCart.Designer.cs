@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineStoreApp.Data;
 
@@ -11,9 +12,11 @@ using OnlineStoreApp.Data;
 namespace OnlineStoreApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251210114549_RevisedProductAndCart")]
+    partial class RevisedProductAndCart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,21 +256,6 @@ namespace OnlineStoreApp.Migrations
                     b.ToTable("Carts");
                 });
 
-            modelBuilder.Entity("OnlineStoreApp.Models.CartProduct", b =>
-                {
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CartId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("CartProducts");
-                });
-
             modelBuilder.Entity("OnlineStoreApp.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -376,21 +364,6 @@ namespace OnlineStoreApp.Migrations
                     b.ToTable("Wishlists");
                 });
 
-            modelBuilder.Entity("OnlineStoreApp.Models.WishlistProduct", b =>
-                {
-                    b.Property<int>("WishlistId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("WishlistId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("WishlistProducts");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -451,25 +424,6 @@ namespace OnlineStoreApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OnlineStoreApp.Models.CartProduct", b =>
-                {
-                    b.HasOne("OnlineStoreApp.Models.Cart", "Cart")
-                        .WithMany("CartProducts")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OnlineStoreApp.Models.Product", "Product")
-                        .WithMany("CartProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cart");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("OnlineStoreApp.Models.Product", b =>
                 {
                     b.HasOne("OnlineStoreApp.Models.Cart", null)
@@ -509,25 +463,6 @@ namespace OnlineStoreApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("OnlineStoreApp.Models.WishlistProduct", b =>
-                {
-                    b.HasOne("OnlineStoreApp.Models.Product", "Product")
-                        .WithMany("WishlistProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OnlineStoreApp.Models.Wishlist", "Wishlist")
-                        .WithMany("WishlistProducts")
-                        .HasForeignKey("WishlistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("Wishlist");
-                });
-
             modelBuilder.Entity("OnlineStoreApp.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Cart")
@@ -539,7 +474,7 @@ namespace OnlineStoreApp.Migrations
 
             modelBuilder.Entity("OnlineStoreApp.Models.Cart", b =>
                 {
-                    b.Navigation("CartProducts");
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("OnlineStoreApp.Models.Category", b =>
@@ -549,16 +484,7 @@ namespace OnlineStoreApp.Migrations
 
             modelBuilder.Entity("OnlineStoreApp.Models.Product", b =>
                 {
-                    b.Navigation("CartProducts");
-
                     b.Navigation("Reviews");
-
-                    b.Navigation("WishlistProducts");
-                });
-
-            modelBuilder.Entity("OnlineStoreApp.Models.Wishlist", b =>
-                {
-                    b.Navigation("WishlistProducts");
                 });
 #pragma warning restore 612, 618
         }
