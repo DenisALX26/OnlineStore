@@ -16,6 +16,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Category> Categories { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<WishlistProduct> WishlistProducts { get; set; }
+    public DbSet<CartProduct> CartProducts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -60,6 +62,33 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithMany(p => p.Reviews)
             .HasForeignKey(r => r.ProductId);
 
+        // M:N For Wishlist and Product through WishlistProduct
+        builder.Entity<WishlistProduct>()
+            .HasKey(wp => new { wp.WishlistId, wp.ProductId });
+
+        builder.Entity<WishlistProduct>()
+            .HasOne<Wishlist>(wp => wp.Wishlist)
+            .WithMany(w => w.WishlistProducts)
+            .HasForeignKey(wp => wp.WishlistId);
+
+        builder.Entity<WishlistProduct>()
+            .HasOne<Product>(wp => wp.Product)
+            .WithMany(p => p.WishlistProducts)
+            .HasForeignKey(wp => wp.ProductId);
+
+        // M:N For Cart and Product through CartProduct
+        builder.Entity<CartProduct>()
+            .HasKey(cp => new { cp.CartId, cp.ProductId });
+
+        builder.Entity<CartProduct>()
+            .HasOne<Cart>(cp => cp.Cart)
+            .WithMany(c => c.CartProducts)
+            .HasForeignKey(cp => cp.CartId);
+
+        builder.Entity<CartProduct>()
+            .HasOne<Product>(cp => cp.Product)
+            .WithMany(p => p.CartProducts)
+            .HasForeignKey(cp => cp.ProductId);
     }
 
 }

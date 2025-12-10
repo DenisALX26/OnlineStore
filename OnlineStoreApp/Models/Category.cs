@@ -7,6 +7,7 @@ namespace OnlineStoreApp.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required(ErrorMessage = "The category must have a name")]
         public string Type { get; set; } = string.Empty;
         public ICollection<Product> Products { get; set; } = new List<Product>();
     }
