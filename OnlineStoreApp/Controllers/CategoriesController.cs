@@ -1,3 +1,4 @@
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineStoreApp.Data;
@@ -5,55 +6,66 @@ using OnlineStoreApp.Models;
 
 namespace OnlineStoreApp.Controllers
 {
-    [Authorize(Roles = "Admin")]
-    public class AdminController : Controller
+    public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _db;
 
-        public AdminController(ApplicationDbContext db)
+        public CategoriesController(ApplicationDbContext db)
         {
             _db = db;
         }
 
-        public IActionResult Categories()
+        [HttpGet("categories")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Index()
         {
             var categories = _db.Categories.ToList();
             return View(categories);
         }
 
-        [HttpGet("create-category")]
-        public IActionResult CreateCategory()
-        {
-            return View();
-        }
-
         [HttpPost("create-category")]
-        public IActionResult CreateCategory(Category model)
+        [Authorize(Roles = "Admin")]
+        public IActionResult Create(Category model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
+            if (_db.Categories.Any(c => c.Type == model.Type))
+            {
+                ModelState.AddModelError("Type", "O categorie cu acest tip există deja.");
+                return View(model);
+            }
+
             _db.Categories.Add(model);
             _db.SaveChanges();
 
-            return RedirectToAction("Categories");
+            return RedirectToAction("Index");
         }
 
-        [HttpGet]
-        public IActionResult EditCategory(int id)
+        [HttpGet("create-category")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpGet("edit-category")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Edit(int id)
         {
             var category = _db.Categories.FirstOrDefault(c => c.Id == id);
-            if(category == null)
+            if (category == null)
             {
                 return NotFound();
             }
             return View(category);
         }
 
-        [HttpPost]
-        public IActionResult EditCategory(Category category)
+        [HttpPost("edit-category")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Edit(Category category)
         {
             if (!ModelState.IsValid)
             {
@@ -63,44 +75,33 @@ namespace OnlineStoreApp.Controllers
             _db.Categories.Update(category);
             _db.SaveChanges();
 
-            return RedirectToAction("Categories");
+            return RedirectToAction("Index");
         }
 
-        [HttpGet]
-        public IActionResult DeleteCategory(int id)
+        [HttpGet("delete-category")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Delete(int id)
         {
             var category = _db.Categories.FirstOrDefault(c => c.Id == id);
-            if(category == null)
+            if (category == null)
             {
                 return NotFound();
             }
             return View(category);
         }
 
-        [HttpPost]
-        public IActionResult DeleteCategoryMethod(int id)
+        [HttpPost("delete-category")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteMethod(int id)
         {
             var category = _db.Categories.FirstOrDefault(c => c.Id == id);
-            if(category == null)
+            if (category == null)
             {
                 return NotFound();
             }
             _db.Categories.Remove(category);
             _db.SaveChanges();
-            return RedirectToAction("Categories");
+            return RedirectToAction("Index");
         }
-
-        public ActionResult Products()
-        {
-            var products = _db.Products.ToList();
-            return View(products);
-        }
-
-        // GET: AdminController
-        public ActionResult Index()
-        {
-            return View();
-        }
-
     }
 }
