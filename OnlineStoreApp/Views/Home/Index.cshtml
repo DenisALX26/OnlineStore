@@ -24,8 +24,11 @@
                                 @product.Category.Type
                             </p>
                         }
-                        <p class="mb-3">
+                        <p class="mb-1">
                             <span class="fw-bold">Stock: </span>@product.Stock
+                        </p>
+                        <p class="mb-3">
+                            <span class="fw-bold">Side: </span>@product.Type
                         </p>
                         @if (!User.Identity!.IsAuthenticated)
                         {

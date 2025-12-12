@@ -5,7 +5,7 @@
 
 <h1>Categories</h1>
 
-<a asp-action="CreateCategory" class="btn btn-primary mb-3">Create New Category</a>
+<a asp-action="Create" class="btn btn-primary mb-3">Create New Category</a>
 
 <table class="table table-striped">
     <thead>
@@ -22,8 +22,8 @@
                 <td>@cat.Id</td>
                 <td>@cat.Type</td>
                 <td>
-                    <a asp-action="EditCategory" asp-route-id="@cat.Id" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="DeleteCategory" asp-route-id="@cat.Id" class="btn btn-sm btn-danger">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@cat.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="DeleteMethod" asp-route-id="@cat.Id" class="btn btn-sm btn-danger">Delete</a>
                 </td>
             </tr>
         }

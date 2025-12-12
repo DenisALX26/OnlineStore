@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineStoreApp.Data;
@@ -21,6 +22,12 @@ public class HomeController : Controller
     {
         var products = _db.Products.Include(p => p.Category).ToList();
         return View(products);
+    }
+
+    [Authorize(Roles = "Admin")]
+    public IActionResult Admin()
+    {
+        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

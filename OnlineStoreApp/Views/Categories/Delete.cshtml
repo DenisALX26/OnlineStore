@@ -6,7 +6,7 @@
 
 <p>Are you sure you want to delete the category "@Model.Type"?</p>
 
-<form method="post" asp-action="DeleteCategoryMethod" asp-route-id="@Model.Id">
+<form method="post" asp-action="DeleteMethod" asp-route-id="@Model.Id">
     <button type="submit" class="btn btn-danger">Delete</button>
-    <a asp-action="Categories" class="btn btn-secondary">Cancel</a>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
