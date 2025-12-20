@@ -4,7 +4,7 @@
 }
 <h1>Delete Category</h1>
 
-<p>Are you sure you want to delete the category "@Model.Type"?</p>
+<p>Are you sure you want to delete the category "@Model.Type" and all associated products?</p>
 
 <form method="post" asp-action="DeleteMethod" asp-route-id="@Model.Id">
     <button type="submit" class="btn btn-danger">Delete</button>
