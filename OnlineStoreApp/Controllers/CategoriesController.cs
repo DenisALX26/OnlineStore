@@ -99,6 +99,8 @@ namespace OnlineStoreApp.Controllers
             {
                 return NotFound();
             }
+            var products = _db.Products.Where(p => p.CategoryId == id).ToList();
+            _db.Products.RemoveRange(products);
             _db.Categories.Remove(category);
             _db.SaveChanges();
             return RedirectToAction("Index");
