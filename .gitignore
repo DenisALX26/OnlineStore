@@ -62,3 +62,7 @@ nunit-*.xml
 /OnlineStoreApp/Migrations/20251210141627_SyncCartProducts.cs
 /OnlineStoreApp/Migrations/20251210141627_SyncCartProducts.Designer.cs
 /OnlineStoreApp/Migrations/ApplicationDbContextModelSnapshot.cs
+
+# Images folder
+/OnlineStoreApp/wwwroot/images/*
+!/OnlineStoreApp/wwwroot/images/.gitkeep
