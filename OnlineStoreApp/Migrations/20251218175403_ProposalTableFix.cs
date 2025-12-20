@@ -5,7 +5,7 @@
 namespace OnlineStoreApp.Migrations
 {
     /// <inheritdoc />
-    public partial class Cart : Migration
+    public partial class ProposalTableFix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

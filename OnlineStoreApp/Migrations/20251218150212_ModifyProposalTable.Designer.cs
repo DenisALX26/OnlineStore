@@ -12,8 +12,8 @@ using OnlineStoreApp.Data;
 namespace OnlineStoreApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251210114549_RevisedProductAndCart")]
-    partial class RevisedProductAndCart
+    [Migration("20251218150212_ModifyProposalTable")]
+    partial class ModifyProposalTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -256,6 +256,21 @@ namespace OnlineStoreApp.Migrations
                     b.ToTable("Carts");
                 });
 
+            modelBuilder.Entity("OnlineStoreApp.Models.CartProduct", b =>
+                {
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartProducts");
+                });
+
             modelBuilder.Entity("OnlineStoreApp.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -280,9 +295,6 @@ namespace OnlineStoreApp.Migrations
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CartId")
-                        .HasColumnType("int");
 
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
@@ -313,11 +325,52 @@ namespace OnlineStoreApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CartId");
-
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("OnlineStoreApp.Models.Proposal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Proposals");
                 });
 
             modelBuilder.Entity("OnlineStoreApp.Models.Review", b =>
@@ -362,6 +415,21 @@ namespace OnlineStoreApp.Migrations
                         .IsUnique();
 
                     b.ToTable("Wishlists");
+                });
+
+            modelBuilder.Entity("OnlineStoreApp.Models.WishlistProduct", b =>
+                {
+                    b.Property<int>("WishlistId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("WishlistId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("WishlistProducts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -424,17 +492,43 @@ namespace OnlineStoreApp.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("OnlineStoreApp.Models.CartProduct", b =>
+                {
+                    b.HasOne("OnlineStoreApp.Models.Cart", "Cart")
+                        .WithMany("CartProducts")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OnlineStoreApp.Models.Product", "Product")
+                        .WithMany("CartProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("OnlineStoreApp.Models.Product", b =>
                 {
-                    b.HasOne("OnlineStoreApp.Models.Cart", null)
-                        .WithMany("Products")
-                        .HasForeignKey("CartId");
-
                     b.HasOne("OnlineStoreApp.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("OnlineStoreApp.Models.Proposal", b =>
+                {
+                    b.HasOne("OnlineStoreApp.Models.ApplicationUser", "User")
+                        .WithMany("Proposals")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OnlineStoreApp.Models.Review", b =>
@@ -463,10 +557,31 @@ namespace OnlineStoreApp.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("OnlineStoreApp.Models.WishlistProduct", b =>
+                {
+                    b.HasOne("OnlineStoreApp.Models.Product", "Product")
+                        .WithMany("WishlistProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OnlineStoreApp.Models.Wishlist", "Wishlist")
+                        .WithMany("WishlistProducts")
+                        .HasForeignKey("WishlistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Wishlist");
+                });
+
             modelBuilder.Entity("OnlineStoreApp.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Cart")
                         .IsRequired();
+
+                    b.Navigation("Proposals");
 
                     b.Navigation("Wishlist")
                         .IsRequired();
@@ -474,7 +589,7 @@ namespace OnlineStoreApp.Migrations
 
             modelBuilder.Entity("OnlineStoreApp.Models.Cart", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("CartProducts");
                 });
 
             modelBuilder.Entity("OnlineStoreApp.Models.Category", b =>
@@ -484,7 +599,16 @@ namespace OnlineStoreApp.Migrations
 
             modelBuilder.Entity("OnlineStoreApp.Models.Product", b =>
                 {
+                    b.Navigation("CartProducts");
+
                     b.Navigation("Reviews");
+
+                    b.Navigation("WishlistProducts");
+                });
+
+            modelBuilder.Entity("OnlineStoreApp.Models.Wishlist", b =>
+                {
+                    b.Navigation("WishlistProducts");
                 });
 #pragma warning restore 612, 618
         }

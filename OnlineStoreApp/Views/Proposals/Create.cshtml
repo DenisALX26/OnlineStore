@@ -1,0 +1,123 @@
+@model OnlineStoreApp.Models.Proposal
+
+@{
+    ViewData["Title"] = "New Proposal";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+
+                    <h2 class="fw-bold mb-4 text-center">
+                        Propune un nou produs
+                    </h2>
+
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <!-- Title -->
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label fw-semibold"></label>
+                            <input asp-for="Title" class="form-control" placeholder="Titlu produs" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label fw-semibold"></label>
+                            <textarea asp-for="Description" class="form-control" rows="4"
+                                placeholder="Descrie ideea produsului"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <!-- Price -->
+                        <div class="mb-3">
+                            <label asp-for="Price" class="form-label fw-semibold"></label>
+                            <input asp-for="Price" type="number" step="0.01" class="form-control" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+
+                        <!-- Image -->
+                        <div class="form-group mb-4">
+                            <label asp-for="Image">Încarcă Imaginea</label>
+                            <input asp-for="Image" class="form-control" type="file" />
+                            <span asp-validation-for="Image" class="text-danger"></span>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Categorie</label>
+
+                            <!-- SELECT EXISTENT -->
+                            <div id="categorySelectWrapper">
+                                <select asp-for="Category" class="form-control" asp-items="ViewBag.Categories">
+                                    <option value="">-- Select Category --</option>
+                                </select>
+                            </div>
+
+                            <!-- INPUT NOU -->
+                            <div id="categoryInputWrapper" class="d-none">
+                                <input asp-for="Category" class="form-control" placeholder="Categorie nouă" />
+                            </div>
+
+                            <!-- CHECKBOX -->
+                            <div class="form-check mt-3">
+                                <input type="checkbox" id="newCategoryCheckbox" class="form-check-input" />
+                                <label class="form-check-label" for="newCategoryCheckbox">
+                                    Sugerează categorie nouă
+                                </label>
+                            </div>
+
+                            <span asp-validation-for="Category" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                Anulează
+                            </a>
+
+                            <button type="submit" class="btn btn-primary">
+                                Trimite Propunerea
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<script>
+    const checkbox = document.getElementById("newCategoryCheckbox");
+    const selectWrapper = document.getElementById("categorySelectWrapper");
+    const inputWrapper = document.getElementById("categoryInputWrapper");
+
+    const select = selectWrapper.querySelector("select");
+    const input = inputWrapper.querySelector("input");
+
+    // default state
+    input.disabled = true;
+
+    checkbox.addEventListener("change", () => {
+        if (checkbox.checked) {
+            selectWrapper.classList.add("d-none");
+            inputWrapper.classList.remove("d-none");
+
+            select.disabled = true;
+            input.disabled = false;
+        } else {
+            inputWrapper.classList.add("d-none");
+            selectWrapper.classList.remove("d-none");
+
+            input.disabled = true;
+            select.disabled = false;
+        }
+    });
+</script>
