@@ -147,7 +147,7 @@ namespace OnlineStoreApp.Controllers
 
             ViewBag.Categories = new SelectList(
                 _db.Categories,
-                "Id",
+                "Type",
                 "Type",
                 proposal.Category
             );
@@ -176,7 +176,7 @@ namespace OnlineStoreApp.Controllers
             {
                 ViewBag.Categories = new SelectList(
                     _db.Categories,
-                    "Id",
+                    "Type",
                     "Type",
                     model.Category
                 );
@@ -195,7 +195,7 @@ namespace OnlineStoreApp.Controllers
 
                     ViewBag.Categories = new SelectList(
                         _db.Categories,
-                        "Id",
+                        "Type",
                         "Type",
                         model.Category
                     );

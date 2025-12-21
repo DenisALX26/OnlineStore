@@ -1,31 +1,47 @@
-@model List<Category>
+@model IEnumerable<Category>
 @{
-    ViewData["Title"] = "Categories";
+    Layout = "_AdminLayout";
 }
 
-<h1>Categories</h1>
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title">Categorii</h3>
+        <div class="card-tools">
+            <a asp-action="Create" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Add
+            </a>
+        </div>
+    </div>
 
-<a asp-action="Create" class="btn btn-primary mb-3">Create New Category</a>
+    <div class="card-body p-0">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nume</th>
+                    <th style="width:140px">Acțiuni</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model)
+                {
+                    <tr>
+                        <td>@c.Type</td>
+                        <td>
+                            <a asp-action="Edit"
+                               asp-route-id="@c.Id"
+                               class="btn btn-warning btn-sm mr-1">
+                                <i class="fas fa-edit"></i>
+                            </a>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var cat in Model)
-        {
-            <tr>
-                <td>@cat.Id</td>
-                <td>@cat.Type</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@cat.Id" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="DeleteMethod" asp-route-id="@cat.Id" class="btn btn-sm btn-danger">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                            <a asp-action="Delete"
+                               asp-route-id="@c.Id"
+                               class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

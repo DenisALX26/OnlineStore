@@ -27,6 +27,9 @@ public class HomeController : Controller
     [Authorize(Roles = "Admin")]
     public IActionResult Admin()
     {
+        ViewBag.CategoriesCount = _db.Categories.Count();
+        ViewBag.ProductsCount = _db.Products.Count();
+        ViewBag.ProposalsCount = _db.Proposals.Count();
         return View();
     }
 
