@@ -30,6 +30,7 @@ public class HomeController : Controller
         ViewBag.CategoriesCount = _db.Categories.Count();
         ViewBag.ProductsCount = _db.Products.Count();
         ViewBag.ProposalsCount = _db.Proposals.Count();
+        ViewBag.UsersCount = _db.Users.Count();
         return View();
     }
 

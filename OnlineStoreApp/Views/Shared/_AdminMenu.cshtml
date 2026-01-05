@@ -7,28 +7,30 @@
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview">
 
         <li class="nav-item">
-            <a href="/Home/Admin"
-               class="nav-link @(currentAction == "Admin" ? "active" : "")">
+            <a href="/Home/Admin" class="nav-link @(currentAction == "Admin" ? "active" : "")">
                 <i class="nav-icon fas fa-chart-line"></i>
                 <p>Dashboard</p>
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="/Categories"
-               class="nav-link @(currentController == "Categories" ? "active" : "")">
+            <a href="/Categories" class="nav-link @(currentController == "Categories" ? "active" : "")">
                 <i class="nav-icon fas fa-tags"></i>
                 <p>Categorii</p>
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="/Products"
-               class="nav-link @(currentController == "Products" ? "active" : "")">
+            <a href="/Products" class="nav-link @(currentController == "Products" ? "active" : "")">
                 <i class="nav-icon fas fa-box"></i>
                 <p>Produse</p>
             </a>
         </li>
-
+        <li class="nav-item">
+            <a href="/ApplicationUsers" class="nav-link @(currentController == "ApplicationUsers" ? "active" : "")">
+                <i class="nav-icon fas fa-users"></i>
+                <p>Utilizatori</p>
+            </a>
+        </li>
     </ul>
 </nav>
