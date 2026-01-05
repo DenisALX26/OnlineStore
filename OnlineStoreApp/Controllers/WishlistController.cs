@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using OnlineStoreApp.Data;
 using OnlineStoreApp.Models;
 
 namespace OnlineStoreApp.Controllers
@@ -9,20 +11,73 @@ namespace OnlineStoreApp.Controllers
     public class WishlistController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _db;
 
-        public WishlistController(UserManager<ApplicationUser> userManager)
+        public WishlistController(UserManager<ApplicationUser> userManager, ApplicationDbContext db)
         {
             _userManager = userManager;
+            _db = db;
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
             {
                 return RedirectToAction("Login", "Account");
             }
-            return View(user.Wishlist);
+            var wishlist = _db.Wishlists.Include(w => w.WishlistProducts).ThenInclude(wp => wp.Product)
+                                        .FirstOrDefault(w => w.UserId == userId);
+            if (wishlist == null)
+            {
+                wishlist = new Wishlist
+                {
+                    UserId = userId,
+                    WishlistProducts = new List<WishlistProduct>()
+                };
+                _db.Wishlists.Add(wishlist);
+                await _db.SaveChangesAsync();
+            }
+            return View(wishlist);
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> Add(int productId)
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var wishlist = _db.Wishlists.Include(w => w.WishlistProducts)
+                                        .FirstOrDefault(w => w.UserId == userId);
+            if (wishlist == null)
+            {
+                wishlist = new Wishlist
+                {
+                    UserId = userId,
+                    WishlistProducts = new List<WishlistProduct>()
+                };
+                _db.Wishlists.Add(wishlist);
+                await _db.SaveChangesAsync();
+            }
+
+            if (!wishlist.WishlistProducts.Any(wp => wp.ProductId == productId))
+            {
+                var wishlistProduct = new WishlistProduct
+                {
+                    WishlistId = wishlist.Id,
+                    ProductId = productId
+                };
+                _db.WishlistProducts.Add(wishlistProduct);
+                await _db.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

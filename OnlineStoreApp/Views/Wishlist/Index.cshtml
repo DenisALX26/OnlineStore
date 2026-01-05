@@ -1,3 +1,102 @@
 @model Wishlist
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Wishlist";
+}
 
-<h1>Acesta este wishlist-ul lui @Model.User.UserName</h1>
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Wishlist</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+
+        @if (!Model.WishlistProducts.Any())
+        {
+            <div class="callout callout-info">
+                <h5>Wishlist gol</h5>
+                <p>
+                    Bate vântul pe aici 🌬️  
+                    <a asp-controller="Home" asp-action="Index">
+                        Vezi produsele
+                    </a>
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+
+                @foreach (var item in Model.WishlistProducts)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card card-primary card-outline h-100">
+
+                            <!-- IMAGE -->
+                            <div class="card-body p-0">
+                                <img src="@item.Product.Image"
+                                     alt="@item.Product.Title"
+                                     class="img-fluid"
+                                     style="height:220px; width:100%; object-fit:cover;">
+                            </div>
+
+                            <div class="card-body">
+
+                                <h5 class="card-title fw-bold">
+                                    @item.Product.Title
+                                </h5>
+
+                                <p class="text-muted mb-1">
+                                    <i class="fas fa-tags"></i>
+                                    @item.Product.Category?.Type
+                                </p>
+
+                                <p class="text-muted mb-1">
+                                    <i class="fas fa-shoe-prints"></i>
+                                    Picior: @item.Product.Type
+                                </p>
+
+                                <h4 class="text-primary mt-3">
+                                    @item.Product.Price.ToString("0.00") RON
+                                </h4>
+
+                            </div>
+
+                            <!-- ACTIONS -->
+                            <div class="card-footer d-flex justify-content-between">
+
+                                <form asp-controller="Cart"
+                                      asp-action="Add"
+                                      method="post"
+                                      class="w-75">
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <button class="btn btn-success btn-block">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        Move to cart
+                                    </button>
+                                </form>
+
+                                <form asp-action="Remove" method="post">
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <button class="btn btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+</section>
