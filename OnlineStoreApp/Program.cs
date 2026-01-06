@@ -40,6 +40,7 @@ else
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles(); // Must be before UseRouting to serve static files
 app.UseRouting();
 
 app.UseAuthorization();
@@ -53,7 +54,5 @@ app.MapControllerRoute(
 
 app.MapRazorPages()
    .WithStaticAssets();
-
-app.UseStaticFiles();
 
 app.Run();

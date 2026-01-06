@@ -85,17 +85,33 @@
                     <div class="card-body">
                         @if (Model.Reviews != null && Model.Reviews.Any())
                         {
-                            <ul class="list-group list-group-flush">
-                                @foreach (var review in Model.Reviews)
+                            <div class="list-group">
+                                @foreach (var review in Model.Reviews.OrderByDescending(r => r.CreatedAt))
                                 {
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <strong>@(review.User?.UserName ?? "Unknown user")</strong>
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <div>
+                                                <strong>@(review.User?.UserName ?? "Unknown user")</strong>
+                                                <div class="mt-1">
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i <= review.Rating)
+                                                        {
+                                                            <span class="text-warning">★</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-muted">☆</span>
+                                                        }
+                                                    }
+                                                    <span class="ms-2 text-muted small">@review.CreatedAt.ToString("MMM dd, yyyy")</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <small class="text-muted">Review #@review.Id</small>
-                                    </li>
+                                        <p class="mb-0">@review.Comment</p>
+                                    </div>
                                 }
-                            </ul>
+                            </div>
                         }
                         else
                         {
