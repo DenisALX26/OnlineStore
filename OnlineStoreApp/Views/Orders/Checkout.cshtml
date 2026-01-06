@@ -1,0 +1,125 @@
+@model OnlineStoreApp.Models.Cart
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">
+        <i class="fas fa-credit-card"></i> Checkout
+    </h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (Model.CartProducts == null || !Model.CartProducts.Any())
+    {
+        <div class="alert alert-warning">
+            <h5>Coșul tău este gol</h5>
+            <p>
+                Adaugă produse în coș înainte de a plasa o comandă.
+                <a asp-controller="Cart" asp-action="Index" class="btn btn-primary ms-2">
+                    Vezi coșul
+                </a>
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <!-- Order Items -->
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Produse în comandă</h5>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var item in Model.CartProducts)
+                        {
+                            <div class="row mb-3 pb-3 border-bottom">
+                                <div class="col-md-3">
+                                    <img src="@item.Product?.Image" 
+                                         alt="@item.Product?.Title" 
+                                         class="img-fluid rounded"
+                                         style="height:120px; width:100%; object-fit:cover;" />
+                                </div>
+                                <div class="col-md-9">
+                                    <h6 class="fw-bold">@item.Product?.Title</h6>
+                                    @if (item.Product?.Category != null)
+                                    {
+                                        <p class="text-muted mb-1 small">
+                                            <i class="fas fa-tags"></i> @item.Product.Category.Type
+                                        </p>
+                                    }
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <p class="mb-1">
+                                                <strong>Cantitate:</strong> @item.Quantity bucăți
+                                            </p>
+                                            <p class="mb-0">
+                                                <strong>Preț unitar:</strong> @item.Product?.Price.ToString("0.00") RON
+                                            </p>
+                                        </div>
+                                        <div class="text-end">
+                                            <p class="text-success fw-bold fs-5 mb-0">
+                                                @((item.Product?.Price ?? 0) * item.Quantity) RON
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Sumar comandă</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Subtotal:</span>
+                            <span class="fw-bold">@Model.TotalPrice.ToString("0.00") RON</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Livrare:</span>
+                            <span>Gratuită</span>
+                        </div>
+                        <hr />
+                        <div class="d-flex justify-content-between mb-4">
+                            <strong>Total:</strong>
+                            <strong class="text-success fs-4">@Model.TotalPrice.ToString("0.00") RON</strong>
+                        </div>
+                        
+                        <form asp-controller="Orders" asp-action="PlaceOrder" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-success w-100 btn-lg">
+                                <i class="fas fa-check"></i> Plasează comanda
+                            </button>
+                        </form>
+                        
+                        <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-secondary w-100 mt-2">
+                            <i class="fas fa-arrow-left"></i> Înapoi la coș
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

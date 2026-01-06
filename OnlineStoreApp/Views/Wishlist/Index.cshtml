@@ -82,9 +82,10 @@
                                     </button>
                                 </form>
 
-                                <form asp-action="Remove" method="post">
+                                <form asp-controller="Wishlist" asp-action="Remove" method="post">
+                                    @Html.AntiForgeryToken()
                                     <input type="hidden" name="productId" value="@item.ProductId" />
-                                    <button class="btn btn-danger">
+                                    <button type="submit" class="btn btn-danger">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>

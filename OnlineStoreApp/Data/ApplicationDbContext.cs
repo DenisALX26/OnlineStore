@@ -20,6 +20,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<CartProduct> CartProducts { get; set; }
     public DbSet<Proposal> Proposals { get; set; }
     public DbSet<FAQ> FAQs { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -101,6 +103,24 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne<ApplicationUser>(p => p.User)
             .WithMany(u => u.Proposals)
             .HasForeignKey(p => p.UserId);
+
+        // 1:M For Order and ApplicationUser
+        builder.Entity<Order>()
+            .HasOne<ApplicationUser>(o => o.User)
+            .WithMany()
+            .HasForeignKey(o => o.UserId);
+
+        // 1:M For OrderItem and Order
+        builder.Entity<OrderItem>()
+            .HasOne<Order>(oi => oi.Order)
+            .WithMany(o => o.OrderItems)
+            .HasForeignKey(oi => oi.OrderId);
+
+        // M:1 For OrderItem and Product
+        builder.Entity<OrderItem>()
+            .HasOne<Product>(oi => oi.Product)
+            .WithMany()
+            .HasForeignKey(oi => oi.ProductId);
     }
 
 }

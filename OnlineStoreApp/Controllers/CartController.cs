@@ -47,8 +47,8 @@ namespace OnlineStoreApp.Controllers
                 await _db.SaveChangesAsync();
             }
 
-            // Calculate total price
-            cart.TotalPrice = cart.CartProducts?.Sum(cp => cp.Product?.Price ?? 0) ?? 0;
+            // Calculate total price based on quantity
+            cart.TotalPrice = cart.CartProducts?.Sum(cp => (cp.Product?.Price ?? 0) * cp.Quantity) ?? 0;
             await _db.SaveChangesAsync();
 
             return View(cart);
@@ -56,7 +56,7 @@ namespace OnlineStoreApp.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> Add(int productId, string returnUrl = null)
+        public async Task<IActionResult> Add(int productId, int quantity = 1, string returnUrl = null)
         {
             var userId = _userManager.GetUserId(User);
             if (userId == null)
@@ -71,7 +71,33 @@ namespace OnlineStoreApp.Controllers
             var product = await _db.Products.FindAsync(productId);
             if (product == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Produsul nu a fost găsit.";
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+                return RedirectToAction("Index");
+            }
+
+            // Validate stock
+            if (product.Stock < quantity)
+            {
+                TempData["ErrorMessage"] = $"Stoc insuficient. Disponibil: {product.Stock} bucăți.";
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+                return RedirectToAction("Index");
+            }
+
+            if (quantity <= 0)
+            {
+                TempData["ErrorMessage"] = "Cantitatea trebuie să fie mai mare decât 0.";
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+                return RedirectToAction("Index");
             }
 
             var cart = await _db.Carts
@@ -91,21 +117,89 @@ namespace OnlineStoreApp.Controllers
             }
 
             // Check if product is already in cart
-            if (!cart.CartProducts!.Any(cp => cp.ProductId == productId))
+            var existingCartProduct = cart.CartProducts!.FirstOrDefault(cp => cp.ProductId == productId);
+            if (existingCartProduct != null)
+            {
+                // Update quantity if product already in cart
+                var newQuantity = existingCartProduct.Quantity + quantity;
+                if (product.Stock < newQuantity)
+                {
+                    TempData["ErrorMessage"] = $"Stoc insuficient. Disponibil: {product.Stock} bucăți. În coș: {existingCartProduct.Quantity} bucăți.";
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    return RedirectToAction("Index");
+                }
+                existingCartProduct.Quantity = newQuantity;
+            }
+            else
             {
                 var cartProduct = new CartProduct
                 {
                     CartId = cart.Id,
-                    ProductId = productId
+                    ProductId = productId,
+                    Quantity = quantity
                 };
                 _db.CartProducts.Add(cartProduct);
-                await _db.SaveChangesAsync();
             }
+            
+            await _db.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Produsul a fost adăugat în coș cu succes!";
 
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
             {
                 return Redirect(returnUrl);
             }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> UpdateQuantity(int productId, int quantity)
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account", new { area = "Identity" });
+            }
+
+            var cart = await _db.Carts
+                .Include(c => c.CartProducts)
+                    .ThenInclude(cp => cp.Product)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            if (cart == null)
+            {
+                return NotFound();
+            }
+
+            var cartProduct = cart.CartProducts?.FirstOrDefault(cp => cp.ProductId == productId);
+            if (cartProduct == null)
+            {
+                return NotFound();
+            }
+
+            if (quantity <= 0)
+            {
+                // Remove product if quantity is 0 or less
+                _db.CartProducts.Remove(cartProduct);
+                await _db.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Produsul a fost eliminat din coș.";
+                return RedirectToAction("Index");
+            }
+
+            // Validate stock
+            if (cartProduct.Product!.Stock < quantity)
+            {
+                TempData["ErrorMessage"] = $"Stoc insuficient. Disponibil: {cartProduct.Product.Stock} bucăți.";
+                return RedirectToAction("Index");
+            }
+
+            cartProduct.Quantity = quantity;
+            await _db.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Cantitatea a fost actualizată cu succes!";
 
             return RedirectToAction("Index");
         }
@@ -134,6 +228,7 @@ namespace OnlineStoreApp.Controllers
             {
                 _db.CartProducts.Remove(cartProduct);
                 await _db.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Produsul a fost eliminat din coș.";
             }
 
             return RedirectToAction("Index");
