@@ -25,7 +25,7 @@
                             <th>Price</th>
                             <th>Type</th>
                             <th>Category</th>
-                            <th style="width:150px">Actions</th>
+                            <th style="width:200px">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,7 +36,12 @@
                                 <td>@item.Price.ToString("0.00")</td>
                                 <td>@item.Type</td>
                                 <td>@item.Category?.Type</td>
-                                <td>
+                                <td class="text-nowrap">
+                                    <a asp-action="Details"
+                                       asp-route-id="@item.Id"
+                                       class="btn btn-info btn-sm mr-1">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
                                     <a asp-action="Edit"
                                        asp-route-id="@item.Id"
                                        class="btn btn-warning btn-sm mr-1">

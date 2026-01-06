@@ -23,6 +23,23 @@ namespace OnlineStoreApp.Controllers
             return View(products);
         }
 
+        // GET: /Products/Details/5
+        public IActionResult Details(int id)
+        {
+            var product = _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Reviews!)
+                    .ThenInclude(r => r.User)
+                .FirstOrDefault(p => p.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
         public IActionResult Create()
         {
             // Pre-populate dropdown with available categories

@@ -18,10 +18,13 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+// Apply migrations and seed initial data
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-        SeedData.Initialize(services);
+    var context = services.GetRequiredService<ApplicationDbContext>();
+    context.Database.Migrate(); // create/update tables if needed
+    SeedData.Initialize(services);
 }
 
 // Configure the HTTP request pipeline.

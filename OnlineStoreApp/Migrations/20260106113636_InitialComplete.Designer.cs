@@ -12,8 +12,8 @@ using OnlineStoreApp.Data;
 namespace OnlineStoreApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251214165836_ImplementProposalTable")]
-    partial class ImplementProposalTable
+    [Migration("20260106113636_InitialComplete")]
+    partial class InitialComplete
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -338,6 +338,24 @@ namespace OnlineStoreApp.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double");
+
+                    b.Property<string>("RejectionReason")
+                        .HasColumnType("longtext");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -350,6 +368,10 @@ namespace OnlineStoreApp.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 

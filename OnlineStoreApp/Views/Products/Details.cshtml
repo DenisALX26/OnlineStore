@@ -1,0 +1,111 @@
+@model OnlineStoreApp.Models.Product
+@{
+    // Folosim layout-ul public și nu cel de admin,
+    // iar butonul Back duce către pagina principală (Home/Index)
+    Layout = "_Layout";
+    ViewData["Title"] = $"Details - {Model.Title}";
+}
+
+<section class="py-4">
+    <div class="container">
+
+        <div class="row mb-4">
+            <div class="col-12 d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">@Model.Title</h2>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to shop
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5 mb-3">
+                <div class="border rounded shadow-sm p-3 text-center bg-white">
+                    @if (!string.IsNullOrWhiteSpace(Model.Image))
+                    {
+                        <img src="@Model.Image"
+                             alt="@Model.Title"
+                             class="img-fluid rounded" />
+                    }
+                    else
+                    {
+                        <div class="d-flex flex-column justify-content-center align-items-center"
+                             style="height:250px;">
+                            <i class="fas fa-shoe-prints fa-4x text-muted mb-3"></i>
+                            <span class="text-muted">No image available</span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="col-md-7 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title mb-3">@Model.Title</h4>
+
+                        <div class="mb-3">
+                            <span class="h4 text-primary">@Model.Price.ToString("0.00") €</span>
+                            @if (Model.Stock > 0)
+                            {
+                                <span class="badge bg-success ms-2">In stock (@Model.Stock)</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger ms-2">Out of stock</span>
+                            }
+                        </div>
+
+                        <p class="text-muted mb-3">
+                            @Model.Description
+                        </p>
+
+                        <dl class="row small mb-0">
+                            <dt class="col-sm-4">Type</dt>
+                            <dd class="col-sm-8">@Model.Type</dd>
+
+                            <dt class="col-sm-4">Category</dt>
+                            <dd class="col-sm-8">@(Model.Category?.Type ?? "No category")</dd>
+
+                            <dt class="col-sm-4">Rating</dt>
+                            <dd class="col-sm-8">
+                                @(Model.Rating > 0 ? Model.Rating.ToString("0.0") : "No rating yet")
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Reviews</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (Model.Reviews != null && Model.Reviews.Any())
+                        {
+                            <ul class="list-group list-group-flush">
+                                @foreach (var review in Model.Reviews)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>@(review.User?.UserName ?? "Unknown user")</strong>
+                                        </div>
+                                        <small class="text-muted">Review #@review.Id</small>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">No reviews for this product yet.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
