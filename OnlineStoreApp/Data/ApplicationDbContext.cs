@@ -18,6 +18,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Product> Products { get; set; }
     public DbSet<WishlistProduct> WishlistProducts { get; set; }
     public DbSet<CartProduct> CartProducts { get; set; }
+    public DbSet<Proposal> Proposals { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -89,6 +90,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne<Product>(cp => cp.Product)
             .WithMany(p => p.CartProducts)
             .HasForeignKey(cp => cp.ProductId);
+
+        builder.Entity<Proposal>()
+            .HasOne<ApplicationUser>(p => p.User)
+            .WithMany(u => u.Proposals)
+            .HasForeignKey(p => p.UserId);
     }
 
 }

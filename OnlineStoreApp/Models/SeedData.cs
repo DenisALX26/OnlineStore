@@ -34,13 +34,13 @@ public class SeedData
                     Id = "2c5e174e-3b0e-446f-86af-483d56fd7212",
                     Name = "Customer",
                     NormalizedName = "Customer".ToUpper()
-                },
-                new IdentityRole
-                {
-                    Id = "2c5e174e-3b0e-446f-86af-483d56fd7213",
-                    Name = "Guest",
-                    NormalizedName = "Guest".ToUpper()
                 }
+                // new IdentityRole
+                // {
+                //     Id = "2c5e174e-3b0e-446f-86af-483d56fd7213",
+                //     Name = "Guest",
+                //     NormalizedName = "Guest".ToUpper()
+                // }
             );
 
             var hasher = new PasswordHasher<ApplicationUser>();
@@ -99,6 +99,18 @@ public class SeedData
                     Wishlist = new Wishlist(),
                     Cart = new Cart()
                 }
+                // new ApplicationUser
+                // {
+                //     Id = "8e445865-a24d-4543-a6c6-9443d048cdb12",
+                //     UserName = "guest@test.com",
+                //     EmailConfirmed = true,
+                //     NormalizedEmail = "GUEST@TEST.COM",
+                //     Email = "guest@test.com",
+                //     NormalizedUserName = "GUEST@TEST.COM",
+                //     PasswordHash = hasher.HashPassword(null, "Guest123!"),
+                //     Wishlist = new Wishlist(),
+                //     Cart = new Cart()
+                // }
             );
 
             context.UserRoles.AddRange(
@@ -116,12 +128,12 @@ public class SeedData
                 {
                     RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7212",
                     UserId = "8e445865-a24d-4543-a6c6-9443d048cdb11"
-                },
-                new IdentityUserRole<string>
-                {
-                    RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7213",
-                    UserId = "8e445865-a24d-4543-a6c6-9443d048cdb12"
                 }
+                // new IdentityUserRole<string>
+                // {
+                //     RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7213",
+                //     UserId = "8e445865-a24d-4543-a6c6-9443d048cdb12"
+                // }
             );
 
             context.SaveChanges();

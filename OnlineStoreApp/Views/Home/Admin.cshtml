@@ -1,0 +1,86 @@
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<!-- Page Header -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-3">
+            <div class="col-sm-6">
+                <h1>Dashboard</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+
+        <!-- STATS CARDS -->
+        <div class="row">
+
+            <div class="col-lg-4 col-12">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@ViewBag.CategoriesCount</h3>
+                        <p>Categorii</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <a asp-controller="Categories" asp-action="Index" class="small-box-footer">
+                        Manage <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-12">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@ViewBag.ProductsCount</h3>
+                        <p>Produse</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <a asp-controller="Products" asp-action="Index" class="small-box-footer">
+                        Manage <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-12">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>@ViewBag.ProposalsCount</h3>
+                        <p>Propuneri</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <a asp-controller="Proposals" asp-action="Index" class="small-box-footer">
+                        Review <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-12">
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>@ViewBag.UsersCount</h3>
+                        <p>Utilizatori</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <a asp-controller="ApplicationUsers" asp-action="Index" class="small-box-footer">
+                        View users <i class="fas fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+</section>

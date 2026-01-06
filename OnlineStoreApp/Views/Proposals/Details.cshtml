@@ -1,0 +1,182 @@
+@using OnlineStoreApp.Extensions
+@model OnlineStoreApp.Models.Proposal
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Proposal Details";
+}
+
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="card card-primary card-outline">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="card-title font-weight-bold mb-0">
+                            @Model.Title
+                        </h3>
+
+                        @switch (Model.Status)
+                        {
+                            case ProposalStatus.Pending:
+                                <span class="badge badge-warning">
+                                    @EnumExtensions.GetDisplayName(Model.Status)
+                                </span>
+                                break;
+
+                            case ProposalStatus.Accepted:
+                                <span class="badge badge-success">
+                                    @EnumExtensions.GetDisplayName(Model.Status)
+                                </span>
+                                break;
+
+                            case ProposalStatus.Rejected:
+                                <span class="badge badge-danger">
+                                    @EnumExtensions.GetDisplayName(Model.Status)
+                                </span>
+                                break;
+                        }
+                    </div>
+
+                    <div class="card-body">
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <p class="text-muted">
+                                Propusă de <strong>@Model.Username</strong>
+                            </p>
+                            <hr />
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Image))
+                        {
+                            <div class="text-center mb-4">
+                                <img src="@Model.Image"
+                                     class="img-fluid rounded"
+                                     style="max-height:300px" />
+                            </div>
+                        }
+
+                        <div class="mb-3">
+                            <h5 class="font-weight-bold">Descriere</h5>
+                            <p class="text-muted">
+                                @Model.Description
+                            </p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="font-weight-bold">Preț</h6>
+                                <p>@Model.Price.ToString("0.00") RON</p>
+                            </div>
+
+                            <div class="col-md-6">
+                                <h6 class="font-weight-bold">Categorie</h6>
+                                <p>@Model.Category</p>
+                            </div>
+                        </div>
+
+                        @if (Model.Status == ProposalStatus.Rejected &&
+                             !string.IsNullOrEmpty(Model.RejectionReason))
+                        {
+                            <div class="alert alert-danger mt-4">
+                                <strong>Motiv respingere:</strong><br />
+                                @Model.RejectionReason
+                            </div>
+                        }
+
+                    </div>
+
+                    <div class="card-footer d-flex justify-content-between">
+
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </a>
+
+                        @if (User.IsInRole("Colaborator") &&
+                             Model.Status == ProposalStatus.Rejected)
+                        {
+                            <a asp-action="Edit"
+                               asp-route-id="@Model.Id"
+                               class="btn btn-primary">
+                                <i class="fas fa-edit"></i> Editează
+                            </a>
+                        }
+
+                        @if (User.IsInRole("Admin") &&
+                             Model.Status == ProposalStatus.Pending)
+                        {
+                            <div>
+                                <form asp-action="Approve"
+                                      asp-route-id="@Model.Id"
+                                      method="post"
+                                      class="d-inline">
+                                    <button type="submit"
+                                            class="btn btn-success mr-2">
+                                        <i class="fas fa-check"></i> Aprobă
+                                    </button>
+                                </form>
+
+                                <button class="btn btn-danger"
+                                        data-toggle="modal"
+                                        data-target="#rejectModal">
+                                    <i class="fas fa-times"></i> Respinge
+                                </button>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (User.IsInRole("Admin") && Model.Status == ProposalStatus.Pending)
+{
+    <div class="modal fade" id="rejectModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <form asp-action="Reject" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Respinge Propunerea</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="hidden" name="id" value="@Model.Id" />
+
+                        <div class="form-group">
+                            <label class="font-weight-bold">
+                                Motivul respingerii
+                            </label>
+                            <textarea name="reason"
+                                      class="form-control"
+                                      rows="4"
+                                      required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-outline-secondary"
+                                data-dismiss="modal">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                                class="btn btn-danger">
+                            Respinge
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+}

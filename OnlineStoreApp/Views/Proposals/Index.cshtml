@@ -1,0 +1,106 @@
+@model List<Proposal>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Proposals";
+}
+
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="row mb-3">
+            <div class="col-sm-6">
+                <h1 class="m-0">Propuneri produse</h1>
+            </div>
+
+            @if (User.IsInRole("Colaborator"))
+            {
+                <div class="col-sm-6 text-right">
+                    <a asp-action="Create" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Propunere nouă
+                    </a>
+                </div>
+            }
+        </div>
+
+        <div class="card card-primary card-outline">
+            <div class="card-body p-0">
+
+                @if (!Model.Any())
+                {
+                    <div class="alert alert-info m-3">
+                        Nu există propuneri momentan.
+                    </div>
+                }
+                else
+                {
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Titlu</th>
+                                <th>Status</th>
+
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <th>Colaborator</th>
+                                }
+
+                                <th style="width:120px" class="text-right">Acțiuni</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var proposal in Model)
+                            {
+                                <tr>
+                                    <td class="font-weight-bold">
+                                        @proposal.Title
+                                    </td>
+
+                                    <td>
+                                        @switch (proposal.Status)
+                                        {
+                                            case ProposalStatus.Pending:
+                                                <span class="badge badge-warning">
+                                                    @ViewBag.Statuses[(int)proposal.Status]
+                                                </span>
+                                                break;
+
+                                            case ProposalStatus.Accepted:
+                                                <span class="badge badge-success">
+                                                    @ViewBag.Statuses[(int)proposal.Status]
+                                                </span>
+                                                break;
+
+                                            case ProposalStatus.Rejected:
+                                                <span class="badge badge-danger">
+                                                    @ViewBag.Statuses[(int)proposal.Status]
+                                                </span>
+                                                break;
+                                        }
+                                    </td>
+
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <td>
+                                            @(proposal.Username ?? "—")
+                                        </td>
+                                    }
+
+                                    <td class="text-right">
+                                        <a asp-action="Details"
+                                           asp-route-id="@proposal.Id"
+                                           class="btn btn-sm btn-outline-secondary">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+
+            </div>
+        </div>
+
+    </div>
+</section>
