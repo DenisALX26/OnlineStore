@@ -424,6 +424,41 @@ public class SeedData
             }
 
             context.SaveChanges();
+
+            // Seed FAQs for products
+            var faqs = new List<FAQ>();
+            var commonFAQs = new[]
+            {
+                new { Q = "Are garanție?", A = "Da, toate produsele noastre beneficiază de garanție de 2 ani pentru defecte de fabricație." },
+                new { Q = "Este potrivit pentru copii?", A = "Acest produs este recomandat pentru adulți. Pentru copii, vă recomandăm să consultați măsurile disponibile." },
+                new { Q = "Care sunt măsurile disponibile?", A = "Produsele noastre sunt disponibile în mărimi standard de la 36 la 46. Pentru mărimi speciale, vă rugăm să ne contactați." },
+                new { Q = "Este potrivit pentru alergare?", A = "Acest produs este proiectat pentru uz zilnic și confort. Pentru alergare, recomandăm produsele din categoria Running Shoes." },
+                new { Q = "Este impermeabil?", A = "Produsul oferă protecție de bază împotriva apei, dar nu este complet impermeabil. Pentru condiții extreme, recomandăm produse specializate." },
+                new { Q = "Cum trebuie să îl curăț?", A = "Recomandăm curățarea cu o cârpă umedă și un detergent blând. Evitați mașina de spălat și uscarea la soare direct." },
+                new { Q = "Este potrivit pentru iarnă?", A = "Acest produs oferă confort și protecție de bază, dar pentru condiții de iarnă extreme, recomandăm produse specializate din categoria Boots." },
+                new { Q = "Care este politica de returnare?", A = "Puteți returna produsul în termen de 14 zile de la cumpărare, în condiții originale, cu bonul fiscal." }
+            };
+
+            foreach (var product in savedProducts)
+            {
+                // Add 3-5 FAQs per product
+                int faqCount = random.Next(3, 6);
+                var selectedFAQs = commonFAQs.OrderBy(x => random.Next()).Take(faqCount).ToList();
+                
+                foreach (var faq in selectedFAQs)
+                {
+                    faqs.Add(new FAQ
+                    {
+                        ProductId = product.Id,
+                        Question = faq.Q,
+                        Answer = faq.A,
+                        CreatedAt = DateTime.Now.AddDays(-random.Next(1, 30))
+                    });
+                }
+            }
+
+            context.FAQs.AddRange(faqs);
+            context.SaveChanges();
         }
     }
 }
