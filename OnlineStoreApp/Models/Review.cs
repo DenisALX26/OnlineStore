@@ -11,5 +11,14 @@ namespace OnlineStoreApp.Models
         public virtual Product? Product { get; set; }
         public string? UserId { get; set; }
         public virtual ApplicationUser? User { get; set; }
+        
+        [Required]
+        [StringLength(1000)]
+        public string Comment { get; set; } = string.Empty;
+        
+        [Range(1, 5)]
+        public int Rating { get; set; }
+        
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }
