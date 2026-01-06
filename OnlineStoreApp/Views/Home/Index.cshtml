@@ -54,11 +54,25 @@
                     Sort by price
                 </div>
                 <div class="card-body">
-                    <a asp-route-price="high" class="btn btn-outline-secondary w-100 mb-2">
+                    <a asp-route-price="low" class="btn btn-outline-secondary w-100 mb-2">
                         Price ↑
                     </a>
-                    <a asp-route-price="low" class="btn btn-outline-secondary w-100">
+                    <a asp-route-price="high" class="btn btn-outline-secondary w-100">
                         Price ↓
+                    </a>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header fw-bold">
+                    Sort by rating
+                </div>
+                <div class="card-body">
+                    <a asp-route-rating="low" class="btn btn-outline-secondary w-100 mb-2">
+                        Rating ↑
+                    </a>
+                    <a asp-route-rating="high" class="btn btn-outline-secondary w-100">
+                        Rating ↓
                     </a>
                 </div>
             </div>
@@ -107,6 +121,8 @@
                                 <span class="badge bg-info mb-2">
                                     @product.Type
                                 </span>
+
+                                <p class="mb-2 fw-bold">@product.Rating / 5 ☆</p>
 
                                 <p class="fw-bold mt-auto mb-2 text-success">
                                     @product.Price.ToString("0.00") RON
