@@ -88,5 +88,35 @@ namespace OnlineStoreApp.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Customer")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Remove(int productId)
+        {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+            }
+
+            var wishlist = await _db.Wishlists
+                .Include(w => w.WishlistProducts)
+                .FirstOrDefaultAsync(w => w.UserId == userId);
+
+            if (wishlist == null)
+            {
+                return NotFound();
+            }
+
+            var wishlistProduct = wishlist.WishlistProducts?.FirstOrDefault(wp => wp.ProductId == productId);
+            if (wishlistProduct != null)
+            {
+                _db.WishlistProducts.Remove(wishlistProduct);
+                await _db.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

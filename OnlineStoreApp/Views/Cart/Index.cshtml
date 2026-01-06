@@ -8,6 +8,22 @@
         <i class="fas fa-shopping-cart"></i> Shopping Cart
     </h2>
 
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     @if (Model.CartProducts == null || !Model.CartProducts.Any())
     {
         <div class="alert alert-info">
@@ -36,7 +52,7 @@
                                          class="img-fluid rounded"
                                          style="height:150px; width:100%; object-fit:cover;" />
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <h5 class="fw-bold">@item.Product?.Title</h5>
                                     @if (item.Product?.Category != null)
                                     {
@@ -47,12 +63,38 @@
                                     <p class="text-muted mb-1">
                                         <i class="fas fa-shoe-prints"></i> @item.Product?.Type
                                     </p>
-                                    <p class="text-success fw-bold fs-5 mb-0">
+                                    <p class="text-success fw-bold fs-5 mb-2">
                                         @item.Product?.Price.ToString("0.00") RON
                                     </p>
+                                    @if (item.Product != null)
+                                    {
+                                        <p class="mb-1">
+                                            <small class="text-muted">
+                                                Stoc disponibil: <strong>@item.Product.Stock</strong> bucăți
+                                            </small>
+                                        </p>
+                                    }
                                 </div>
-                                <div class="col-md-3 text-end">
-                                    <form asp-action="Remove" method="post">
+                                <div class="col-md-4">
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <label class="form-label mb-0">Cantitate:</label>
+                                        <form asp-action="UpdateQuantity" method="post" class="d-flex align-items-center gap-2">
+                                            <input type="hidden" name="productId" value="@item.ProductId" />
+                                            <input type="number" 
+                                                   name="quantity" 
+                                                   value="@item.Quantity" 
+                                                   min="1" 
+                                                   max="@item.Product?.Stock"
+                                                   class="form-control form-control-sm" 
+                                                   style="width: 80px;"
+                                                   onchange="this.form.submit()" />
+                                        </form>
+                                    </div>
+                                    <p class="mb-0">
+                                        <strong>Subtotal:</strong> 
+                                        <span class="text-success">@((item.Product?.Price ?? 0) * item.Quantity) RON</span>
+                                    </p>
+                                    <form asp-action="Remove" method="post" class="mt-2">
                                         <input type="hidden" name="productId" value="@item.ProductId" />
                                         <button type="submit" class="btn btn-danger btn-sm">
                                             <i class="fas fa-trash"></i> Remove
@@ -85,9 +127,9 @@
                             <strong>Total:</strong>
                             <strong class="text-success fs-5">@Model.TotalPrice.ToString("0.00") RON</strong>
                         </div>
-                        <button class="btn btn-success w-100" disabled>
+                        <a asp-controller="Orders" asp-action="Checkout" class="btn btn-success w-100">
                             <i class="fas fa-credit-card"></i> Proceed to Checkout
-                        </button>
+                        </a>
                         <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary w-100 mt-2">
                             Continue Shopping
                         </a>
