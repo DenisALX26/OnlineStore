@@ -19,6 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<WishlistProduct> WishlistProducts { get; set; }
     public DbSet<CartProduct> CartProducts { get; set; }
     public DbSet<Proposal> Proposals { get; set; }
+    public DbSet<FAQ> FAQs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -62,6 +63,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<Review>().HasOne<Product>(r => r.Product)
             .WithMany(p => p.Reviews)
             .HasForeignKey(r => r.ProductId);
+
+        // M:1 For FAQ and Product
+        builder.Entity<FAQ>().HasOne<Product>(f => f.Product)
+            .WithMany(p => p.FAQs)
+            .HasForeignKey(f => f.ProductId);
 
         // M:N For Wishlist and Product through WishlistProduct
         builder.Entity<WishlistProduct>()
