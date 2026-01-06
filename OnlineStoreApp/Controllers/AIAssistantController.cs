@@ -47,12 +47,12 @@ namespace OnlineStoreApp.Controllers
             }
 
             var normalizedQuestion = NormalizeText(request.Question);
-            var answer = await FindAnswer(product, normalizedQuestion, request.Question);
+            var answer = FindAnswer(product, normalizedQuestion, request.Question);
 
             return Ok(new { answer = answer });
         }
 
-        private async Task<string> FindAnswer(Models.Product product, string normalizedQuestion, string originalQuestion)
+        private string FindAnswer(Models.Product product, string normalizedQuestion, string originalQuestion)
         {
             // 1. Search in FAQs first
             if (product.FAQs != null && product.FAQs.Any())

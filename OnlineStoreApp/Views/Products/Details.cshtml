@@ -7,7 +7,7 @@
     ViewData["Title"] = $"Details - {Model.Title}";
 }
 
-<section class="py-4">
+<section class="py-4" data-product-id="@Model.Id">
     <div class="container">
 
         @if (TempData["SuccessMessage"] != null)
@@ -543,7 +543,7 @@
 </style>
 
 <script>
-    const productId = @Model.Id;
+    const productId = parseInt(document.querySelector('section[data-product-id]')?.getAttribute('data-product-id') || '0');
     let chatOpen = false;
 
     document.addEventListener('DOMContentLoaded', function() {

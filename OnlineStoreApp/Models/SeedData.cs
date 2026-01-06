@@ -132,12 +132,12 @@ public class SeedData
         {
             var categories = new List<Category>
             {
-                new Category { Type = "Sneakers" },
-                new Category { Type = "Boots" },
-                new Category { Type = "Sandals" },
-                new Category { Type = "Running Shoes" },
-                new Category { Type = "Casual Shoes" },
-                new Category { Type = "Formal Shoes" }
+                new() { Type = "Sneakers" },
+                new() { Type = "Boots" },
+                new() { Type = "Sandals" },
+                new() { Type = "Running Shoes" },
+                new() { Type = "Casual Shoes" },
+                new() { Type = "Formal Shoes" }
             };
             context.Categories.AddRange(categories);
             context.SaveChanges();
@@ -163,7 +163,7 @@ public class SeedData
             var products = new List<Product>
             {
                 // Sneakers
-                new Product
+                new()
                 {
                     Title = "Classic White Sneakers",
                     Description = "Comfortable and stylish white sneakers perfect for everyday wear. Made with premium materials for durability and comfort.",
@@ -174,7 +174,7 @@ public class SeedData
                     Stock = 50,
                     CategoryId = sneakersCat.Id
                 },
-                new Product
+                new()
                 {
                     Title = "Black High-Top Sneakers",
                     Description = "Modern black high-top sneakers with excellent ankle support. Perfect for urban style and casual outings.",
@@ -185,7 +185,7 @@ public class SeedData
                     Stock = 35,
                     CategoryId = sneakersCat.Id
                 },
-                new Product
+                new()
                 {
                     Title = "Retro Style Sneakers",
                     Description = "Vintage-inspired sneakers with bold colors and classic design. Perfect for making a statement.",
@@ -196,7 +196,7 @@ public class SeedData
                     Stock = 42,
                     CategoryId = sneakersCat.Id
                 },
-                new Product
+                new()
                 {
                     Title = "Minimalist White Sneakers",
                     Description = "Clean and simple design with maximum comfort. Perfect for those who prefer understated elegance.",
@@ -208,7 +208,7 @@ public class SeedData
                     CategoryId = sneakersCat.Id
                 },
                 // Boots
-                new Product
+                new()
                 {
                     Title = "Leather Ankle Boots",
                     Description = "Premium leather ankle boots with classic design. Ideal for autumn and winter seasons.",
@@ -219,7 +219,7 @@ public class SeedData
                     Stock = 25,
                     CategoryId = bootsCat.Id
                 },
-                new Product
+                new()
                 {
                     Title = "Combat Boots",
                     Description = "Durable combat boots with rugged design. Perfect for outdoor activities and tough terrain.",
@@ -230,7 +230,7 @@ public class SeedData
                     Stock = 30,
                     CategoryId = bootsCat.Id
                 },
-                new Product
+                new()
                 {
                     Title = "Chelsea Boots",
                     Description = "Elegant Chelsea boots with elastic side panels. Versatile and stylish for any occasion.",
@@ -242,7 +242,7 @@ public class SeedData
                     CategoryId = bootsCat.Id
                 },
                 // Running Shoes
-                new Product
+                new()
                 {
                     Title = "Ultra Lightweight Running Shoes",
                     Description = "Professional running shoes with advanced cushioning technology. Designed for maximum performance and comfort.",
@@ -253,7 +253,7 @@ public class SeedData
                     Stock = 40,
                     CategoryId = runningCat.Id
                 },
-                new Product
+                new()
                 {
                     Title = "Trail Running Shoes",
                     Description = "Rugged trail running shoes with excellent grip and stability. Perfect for off-road running adventures.",
@@ -264,7 +264,7 @@ public class SeedData
                     Stock = 28,
                     CategoryId = runningCat.Id
                 },
-                new Product
+                new()
                 {
                     Title = "Marathon Running Shoes",
                     Description = "High-performance shoes designed for long-distance running. Lightweight with superior energy return.",
@@ -276,7 +276,7 @@ public class SeedData
                     CategoryId = runningCat.Id
                 },
                 // Casual Shoes
-                new Product
+                new()
                 {
                     Title = "Canvas Slip-On Shoes",
                     Description = "Comfortable canvas slip-on shoes in various colors. Easy to wear and perfect for casual occasions.",
@@ -287,7 +287,7 @@ public class SeedData
                     Stock = 60,
                     CategoryId = casualCat.Id
                 },
-                new Product
+                new()
                 {
                     Title = "Loafers",
                     Description = "Classic leather loafers with timeless design. Perfect for smart casual occasions.",
@@ -299,7 +299,7 @@ public class SeedData
                     CategoryId = casualCat.Id
                 },
                 // Sandals
-                new Product
+                new()
                 {
                     Title = "Summer Beach Sandals",
                     Description = "Lightweight and breathable sandals perfect for summer. Water-resistant and comfortable for all-day wear.",
@@ -310,7 +310,7 @@ public class SeedData
                     Stock = 45,
                     CategoryId = sandalsCat.Id
                 },
-                new Product
+                new()
                 {
                     Title = "Sport Sandals",
                     Description = "Durable sport sandals with excellent grip. Perfect for hiking and outdoor activities.",
@@ -322,7 +322,7 @@ public class SeedData
                     CategoryId = sandalsCat.Id
                 },
                 // Formal Shoes
-                new Product
+                new()
                 {
                     Title = "Classic Oxford Dress Shoes",
                     Description = "Elegant oxford dress shoes made from genuine leather. Perfect for business and formal occasions.",
@@ -333,7 +333,7 @@ public class SeedData
                     Stock = 20,
                     CategoryId = formalCat.Id
                 },
-                new Product
+                new()
                 {
                     Title = "Derby Shoes",
                     Description = "Sophisticated derby shoes with open lacing system. Comfortable yet elegant for formal wear.",
@@ -351,7 +351,7 @@ public class SeedData
 
             // Seed Reviews with text and ratings
             var savedProducts = context.Products.ToList();
-            var customers = context.Users.Where(u => u.UserName.Contains("customer") || u.UserName.Contains("guest")).ToList();
+            var customers = context.Users.Where(u => u.UserName != null && (u.UserName.Contains("customer") || u.UserName.Contains("guest"))).ToList();
 
             var reviews = new List<Review>();
             var random = new Random();
@@ -417,7 +417,7 @@ public class SeedData
             foreach (var product in savedProducts)
             {
                 var productReviews = context.Reviews.Where(r => r.ProductId == product.Id).ToList();
-                if (productReviews.Any())
+                if (productReviews.Count > 0)
                 {
                     product.Rating = productReviews.Average(r => r.Rating);
                 }

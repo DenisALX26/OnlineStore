@@ -12,11 +12,13 @@
     <link rel="stylesheet" href="~/OnlineStoreApp.styles.css" asp-append-version="true" />
 </head>
 
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">OnlineStoreApp</a>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
+    <header style="flex-shrink: 0;">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-shopping-bag me-2"></i>OnlineStore
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -80,25 +82,94 @@
                             }
                         }
                     </ul>
-                    <partial name="_LoginPartial" />
+                    <div class="d-flex align-items-center gap-3">
+                        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                            <i class="fas fa-moon" id="themeIcon"></i>
+                            <span id="themeText">Dark</span>
+                        </button>
+                        <partial name="_LoginPartial" />
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container" style="flex: 1; padding-bottom: 20rem;">
+        <main role="main" class="pb-5" style="padding-bottom: 8rem;">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer" style="flex-shrink: 0; margin-top: auto;">
         <div class="container">
-            &copy; 2025 - OnlineStoreApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row g-4">
+                <div class="col-md-4 col-sm-6">
+                    <h5><i class="fas fa-shopping-bag me-2"></i>OnlineStore</h5>
+                    <p class="mt-3">Your trusted destination for quality footwear. Shop the latest trends and classic styles.</p>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled mt-3">
+                        <li><a asp-controller="Home" asp-action="Index"><i class="fas fa-home me-2"></i>Home</a></li>
+                        <li><a href="#"><i class="fas fa-info-circle me-2"></i>About Us</a></li>
+                        <li><a href="#"><i class="fas fa-envelope me-2"></i>Contact</a></li>
+                        <li><a asp-controller="Home" asp-action="Privacy"><i class="fas fa-shield-alt me-2"></i>Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <h5>Follow Us</h5>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="#" class="text-white" aria-label="Facebook"><i class="fab fa-facebook fa-2x"></i></a>
+                        <a href="#" class="text-white" aria-label="Instagram"><i class="fab fa-instagram fa-2x"></i></a>
+                        <a href="#" class="text-white" aria-label="Twitter"><i class="fab fa-twitter fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 OnlineStore. All rights reserved.</p>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        // Theme Toggle Functionality
+        (function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const themeText = document.getElementById('themeText');
+            const html = document.documentElement;
+            
+            // Load saved theme or default to light
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+            
+            // Toggle theme on button click
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    const currentTheme = html.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    html.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    updateThemeIcon(newTheme);
+                });
+            }
+            
+            function updateThemeIcon(theme) {
+                if (themeIcon && themeText) {
+                    if (theme === 'dark') {
+                        themeIcon.className = 'fas fa-sun';
+                        themeText.textContent = 'Light';
+                    } else {
+                        themeIcon.className = 'fas fa-moon';
+                        themeText.textContent = 'Dark';
+                    }
+                }
+            }
+        })();
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 
