@@ -45,12 +45,16 @@ namespace OnlineStoreApp.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Customer")]
-        public async Task<IActionResult> Add(int productId)
+        public async Task<IActionResult> Add(int productId, string returnUrl = null)
         {
             var userId = _userManager.GetUserId(User);
             if (userId == null)
             {
-                return RedirectToAction("Login", "Account");
+                if (!string.IsNullOrEmpty(returnUrl))
+                {
+                    return RedirectToPage("/Account/Login", new { area = "Identity", returnUrl = returnUrl });
+                }
+                return RedirectToPage("/Account/Login", new { area = "Identity", returnUrl = Url.Action("Details", "Products", new { id = productId }) });
             }
 
             var wishlist = _db.Wishlists.Include(w => w.WishlistProducts)
@@ -75,6 +79,11 @@ namespace OnlineStoreApp.Controllers
                 };
                 _db.WishlistProducts.Add(wishlistProduct);
                 await _db.SaveChangesAsync();
+            }
+
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
             }
 
             return RedirectToAction("Index");
