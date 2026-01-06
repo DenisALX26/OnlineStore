@@ -3,19 +3,27 @@
     ViewData["Title"] = "All Products";
 }
 
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container text-center">
+        <h1 class="fade-in-up">Discover Your Perfect Pair</h1>
+        <p class="fade-in-up">Explore our curated collection of premium footwear</p>
+    </div>
+</div>
+
 <div class="container-fluid mt-4">
 
     <!-- SEARCH BAR -->
-    <div class="row mb-4">
-        <div class="col-md-6 mx-auto">
-            <form asp-controller="Home" asp-action="Index" method="get" class="d-flex">
+    <div class="row mb-5">
+        <div class="col-md-8 mx-auto">
+            <form asp-controller="Home" asp-action="Index" method="get" class="search-bar d-flex">
                 <input type="text"
                        name="search"
                        value="@ViewBag.Search"
-                       class="form-control me-2"
-                       placeholder="Search products..." />
-                <button class="btn btn-primary">
-                    Search
+                       class="form-control flex-grow-1"
+                       placeholder="Search for shoes, boots, sneakers..." />
+                <button class="btn btn-primary ms-2">
+                    <i class="fas fa-search me-2"></i>Search
                 </button>
             </form>
         </div>
@@ -38,7 +46,7 @@
                         All Categories
                     </a>
 
-                    @foreach (var cat in ViewBag.Categories as List<Category>)
+                    @foreach (var cat in (ViewBag.Categories as List<Category>) ?? new List<Category>())
                     {
                         <a asp-action="Index"
                            asp-route-category="@cat.Type"
@@ -68,13 +76,13 @@
         <!-- PRODUCTS -->
         <div class="col-lg-10 col-md-9">
 
-            <div class="row g-4">
+            <div class="row g-4" style="margin-bottom: 15rem; padding-bottom: 8rem;">
 
                 @foreach (var product in Model)
                 {
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
 
-                        <div class="card h-100 shadow-sm">
+                        <div class="card h-100 product-card" style="margin-bottom: 2rem;">
 
                             @if (!string.IsNullOrWhiteSpace(product.Image))
                             {
