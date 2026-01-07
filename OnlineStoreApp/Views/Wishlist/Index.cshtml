@@ -1,53 +1,49 @@
 @model Wishlist
 @{
-    Layout = "_AdminLayout";
+    Layout = "_Layout";
     ViewData["Title"] = "Wishlist";
 }
 
-<section class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Wishlist</h1>
-            </div>
+<div class="container mt-4" style="padding-bottom: 15rem; margin-bottom: 5rem;">
+    <h2 class="mb-4">
+        <i class="fas fa-heart"></i> My Wishlist
+    </h2>
+
+    @if (!Model.WishlistProducts.Any())
+    {
+        <div class="alert alert-info">
+            <h5>Wishlist gol</h5>
+            <p>
+                Bate vântul pe aici 🌬️  
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary ms-2">
+                    Vezi produsele
+                </a>
+            </p>
         </div>
-    </div>
-</section>
+    }
+    else
+    {
+        <div class="row g-4">
 
-<section class="content">
-    <div class="container-fluid">
+            @foreach (var item in Model.WishlistProducts)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 product-card">
 
-        @if (!Model.WishlistProducts.Any())
-        {
-            <div class="callout callout-info">
-                <h5>Wishlist gol</h5>
-                <p>
-                    Bate vântul pe aici 🌬️  
-                    <a asp-controller="Home" asp-action="Index">
-                        Vezi produsele
-                    </a>
-                </p>
-            </div>
-        }
-        else
-        {
-            <div class="row">
-
-                @foreach (var item in Model.WishlistProducts)
-                {
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card card-primary card-outline h-100">
-
-                            <!-- IMAGE -->
-                            <div class="card-body p-0">
+                        <!-- IMAGE -->
+                        <div class="card-body p-0">
+                            @if (item.Product != null)
+                            {
                                 <img src="@item.Product.Image"
                                      alt="@item.Product.Title"
                                      class="img-fluid"
                                      style="height:220px; width:100%; object-fit:cover;">
-                            </div>
+                            }
+                        </div>
 
-                            <div class="card-body">
-
+                        <div class="card-body">
+                            @if (item.Product != null)
+                            {
                                 <h5 class="card-title fw-bold">
                                     @item.Product.Title
                                 </h5>
@@ -65,10 +61,13 @@
                                 <h4 class="text-primary mt-3">
                                     @item.Product.Price.ToString("0.00") RON
                                 </h4>
+                            }
 
-                            </div>
+                        </div>
 
-                            <!-- ACTIONS -->
+                        <!-- ACTIONS -->
+                        @if (item.Product != null)
+                        {
                             <div class="card-footer d-flex justify-content-between">
 
                                 <form asp-controller="Cart"
@@ -82,21 +81,22 @@
                                     </button>
                                 </form>
 
-                                <form asp-action="Remove" method="post">
+                                <form asp-controller="Wishlist" asp-action="Remove" method="post">
+                                    @Html.AntiForgeryToken()
                                     <input type="hidden" name="productId" value="@item.ProductId" />
-                                    <button class="btn btn-danger">
+                                    <button type="submit" class="btn btn-danger">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
 
                             </div>
+                        }
 
-                        </div>
                     </div>
-                }
+                </div>
+            }
 
-            </div>
-        }
+        </div>
+    }
 
-    </div>
-</section>
+</div>

@@ -30,5 +30,7 @@ namespace OnlineStoreApp.Models
         public string CreatedByUserId { get; set; } = string.Empty;
         public ApplicationUser? CreatedByUser { get; set; }
         public ProductStatus Status { get; set; } = ProductStatus.Active;
+        public ICollection<FAQ>? FAQs { get; set; }
+
     }
 }

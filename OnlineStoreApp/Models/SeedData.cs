@@ -132,12 +132,12 @@ public class SeedData
         {
             var categories = new List<Category>
             {
-                new Category { Type = "Sneakers" },
-                new Category { Type = "Boots" },
-                new Category { Type = "Sandals" },
-                new Category { Type = "Running Shoes" },
-                new Category { Type = "Casual Shoes" },
-                new Category { Type = "Formal Shoes" }
+                new() { Type = "Sneakers" },
+                new() { Type = "Boots" },
+                new() { Type = "Sandals" },
+                new() { Type = "Running Shoes" },
+                new() { Type = "Casual Shoes" },
+                new() { Type = "Formal Shoes" }
             };
             context.Categories.AddRange(categories);
             context.SaveChanges();
@@ -163,7 +163,7 @@ public class SeedData
             var products = new List<Product>
             {
                 // Sneakers
-                new Product
+                new()
                 {
                     Title = "Classic White Sneakers",
                     Description = "Comfortable and stylish white sneakers perfect for everyday wear. Made with premium materials for durability and comfort.",
@@ -176,7 +176,7 @@ public class SeedData
                     CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                     Status = ProductStatus.Active
                 },
-                new Product
+                new()
                 {
                     Title = "Black High-Top Sneakers",
                     Description = "Modern black high-top sneakers with excellent ankle support. Perfect for urban style and casual outings.",
@@ -189,7 +189,7 @@ public class SeedData
                     CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                     Status = ProductStatus.Active
                 },
-                new Product
+                new()
                 {
                     Title = "Retro Style Sneakers",
                     Description = "Vintage-inspired sneakers with bold colors and classic design. Perfect for making a statement.",
@@ -202,7 +202,7 @@ public class SeedData
                     CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                     Status = ProductStatus.Active
                 },
-                new Product
+                new()
                 {
                     Title = "Minimalist White Sneakers",
                     Description = "Clean and simple design with maximum comfort. Perfect for those who prefer understated elegance.",
@@ -216,7 +216,7 @@ public class SeedData
                     Status = ProductStatus.Active
                 },
                 // Boots
-                new Product
+                new()
                 {
                     Title = "Leather Ankle Boots",
                     Description = "Premium leather ankle boots with classic design. Ideal for autumn and winter seasons.",
@@ -229,7 +229,7 @@ public class SeedData
                     CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                     Status = ProductStatus.Active
                 },
-                new Product
+                new()
                 {
                     Title = "Combat Boots",
                     Description = "Durable combat boots with rugged design. Perfect for outdoor activities and tough terrain.",
@@ -242,7 +242,7 @@ public class SeedData
                     CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                     Status = ProductStatus.Active
                 },
-                new Product
+                new()
                 {
                     Title = "Chelsea Boots",
                     Description = "Elegant Chelsea boots with elastic side panels. Versatile and stylish for any occasion.",
@@ -256,7 +256,7 @@ public class SeedData
                     Status = ProductStatus.Active
                 },
                 // Running Shoes
-                new Product
+                new()
                 {
                     Title = "Ultra Lightweight Running Shoes",
                     Description = "Professional running shoes with advanced cushioning technology. Designed for maximum performance and comfort.",
@@ -269,7 +269,7 @@ public class SeedData
                     CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                     Status = ProductStatus.Active
                 },
-                new Product
+                new()
                 {
                     Title = "Trail Running Shoes",
                     Description = "Rugged trail running shoes with excellent grip and stability. Perfect for off-road running adventures.",
@@ -282,7 +282,7 @@ public class SeedData
                     CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                     Status = ProductStatus.Active
                 },
-                new Product
+                new()
                 {
                     Title = "Marathon Running Shoes",
                     Description = "High-performance shoes designed for long-distance running. Lightweight with superior energy return.",
@@ -296,7 +296,7 @@ public class SeedData
                     Status = ProductStatus.Active
                 },
                 // Casual Shoes
-                new Product
+                new()
                 {
                     Title = "Canvas Slip-On Shoes",
                     Description = "Comfortable canvas slip-on shoes in various colors. Easy to wear and perfect for casual occasions.",
@@ -309,7 +309,7 @@ public class SeedData
                     CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                     Status = ProductStatus.Active
                 },
-                new Product
+                new()
                 {
                     Title = "Loafers",
                     Description = "Classic leather loafers with timeless design. Perfect for smart casual occasions.",
@@ -323,7 +323,7 @@ public class SeedData
                     Status = ProductStatus.Active
                 },
                 // Sandals
-                new Product
+                new()
                 {
                     Title = "Summer Beach Sandals",
                     Description = "Lightweight and breathable sandals perfect for summer. Water-resistant and comfortable for all-day wear.",
@@ -336,7 +336,7 @@ public class SeedData
                     CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                     Status = ProductStatus.Active
                 },
-                new Product
+                new()
                 {
                     Title = "Sport Sandals",
                     Description = "Durable sport sandals with excellent grip. Perfect for hiking and outdoor activities.",
@@ -350,7 +350,7 @@ public class SeedData
                     Status = ProductStatus.Active
                 },
                 // Formal Shoes
-                new Product
+                new()
                 {
                     Title = "Classic Oxford Dress Shoes",
                     Description = "Elegant oxford dress shoes made from genuine leather. Perfect for business and formal occasions.",
@@ -363,7 +363,7 @@ public class SeedData
                     CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                     Status = ProductStatus.Active
                 },
-                new Product
+                new()
                 {
                     Title = "Derby Shoes",
                     Description = "Sophisticated derby shoes with open lacing system. Comfortable yet elegant for formal wear.",
@@ -383,7 +383,7 @@ public class SeedData
 
             // Seed Reviews with text and ratings
             var savedProducts = context.Products.ToList();
-            var customers = context.Users.Where(u => u.UserName.Contains("customer") || u.UserName.Contains("guest")).ToList();
+            var customers = context.Users.Where(u => u.UserName != null && (u.UserName.Contains("customer") || u.UserName.Contains("guest"))).ToList();
 
             var reviews = new List<Review>();
             var random = new Random();
@@ -449,12 +449,47 @@ public class SeedData
             foreach (var product in savedProducts)
             {
                 var productReviews = context.Reviews.Where(r => r.ProductId == product.Id).ToList();
-                if (productReviews.Any())
+                if (productReviews.Count > 0)
                 {
                     product.Rating = productReviews.Average(r => r.Rating);
                 }
             }
 
+            context.SaveChanges();
+
+            // Seed FAQs for products
+            var faqs = new List<FAQ>();
+            var commonFAQs = new[]
+            {
+                new { Q = "Are garanție?", A = "Da, toate produsele noastre beneficiază de garanție de 2 ani pentru defecte de fabricație." },
+                new { Q = "Este potrivit pentru copii?", A = "Acest produs este recomandat pentru adulți. Pentru copii, vă recomandăm să consultați măsurile disponibile." },
+                new { Q = "Care sunt măsurile disponibile?", A = "Produsele noastre sunt disponibile în mărimi standard de la 36 la 46. Pentru mărimi speciale, vă rugăm să ne contactați." },
+                new { Q = "Este potrivit pentru alergare?", A = "Acest produs este proiectat pentru uz zilnic și confort. Pentru alergare, recomandăm produsele din categoria Running Shoes." },
+                new { Q = "Este impermeabil?", A = "Produsul oferă protecție de bază împotriva apei, dar nu este complet impermeabil. Pentru condiții extreme, recomandăm produse specializate." },
+                new { Q = "Cum trebuie să îl curăț?", A = "Recomandăm curățarea cu o cârpă umedă și un detergent blând. Evitați mașina de spălat și uscarea la soare direct." },
+                new { Q = "Este potrivit pentru iarnă?", A = "Acest produs oferă confort și protecție de bază, dar pentru condiții de iarnă extreme, recomandăm produse specializate din categoria Boots." },
+                new { Q = "Care este politica de returnare?", A = "Puteți returna produsul în termen de 14 zile de la cumpărare, în condiții originale, cu bonul fiscal." }
+            };
+
+            foreach (var product in savedProducts)
+            {
+                // Add 3-5 FAQs per product
+                int faqCount = random.Next(3, 6);
+                var selectedFAQs = commonFAQs.OrderBy(x => random.Next()).Take(faqCount).ToList();
+                
+                foreach (var faq in selectedFAQs)
+                {
+                    faqs.Add(new FAQ
+                    {
+                        ProductId = product.Id,
+                        Question = faq.Q,
+                        Answer = faq.A,
+                        CreatedAt = DateTime.Now.AddDays(-random.Next(1, 30))
+                    });
+                }
+            }
+
+            context.FAQs.AddRange(faqs);
             context.SaveChanges();
         }
     }

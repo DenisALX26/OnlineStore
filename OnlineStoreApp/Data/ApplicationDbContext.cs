@@ -20,6 +20,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<CartProduct> CartProducts { get; set; }
     public DbSet<Proposal> Proposals { get; set; }
     public DbSet<ProductEditProposal> ProductEditProposals { get; set; }
+    public DbSet<FAQ> FAQs { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -69,6 +72,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithMany(p => p.Reviews)
             .HasForeignKey(r => r.ProductId);
 
+        // M:1 For FAQ and Product
+        builder.Entity<FAQ>().HasOne<Product>(f => f.Product)
+            .WithMany(p => p.FAQs)
+            .HasForeignKey(f => f.ProductId);
+
         // M:N For Wishlist and Product through WishlistProduct
         builder.Entity<WishlistProduct>()
             .HasKey(wp => new { wp.WishlistId, wp.ProductId });
@@ -101,6 +109,24 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne<ApplicationUser>(p => p.User)
             .WithMany(u => u.Proposals)
             .HasForeignKey(p => p.UserId);
+
+        // 1:M For Order and ApplicationUser
+        builder.Entity<Order>()
+            .HasOne<ApplicationUser>(o => o.User)
+            .WithMany()
+            .HasForeignKey(o => o.UserId);
+
+        // 1:M For OrderItem and Order
+        builder.Entity<OrderItem>()
+            .HasOne<Order>(oi => oi.Order)
+            .WithMany(o => o.OrderItems)
+            .HasForeignKey(oi => oi.OrderId);
+
+        // M:1 For OrderItem and Product
+        builder.Entity<OrderItem>()
+            .HasOne<Product>(oi => oi.Product)
+            .WithMany()
+            .HasForeignKey(oi => oi.ProductId);
     }
 
 }
