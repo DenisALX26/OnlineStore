@@ -1,0 +1,33 @@
+@model List<ProductEditProposal>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Edit Product Proposals";
+}
+
+<h2>Edit Product Proposals</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>By</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var p in Model)
+    {
+        <tr>
+            <td>@p.Product.Title</td>
+            <td>@p.Username</td>
+            <td><span class="badge bg-warning">Pending</span></td>
+            <td>
+                <a asp-action="Details" asp-route-id="@p.Id" class="btn btn-sm btn-primary">
+                    Review
+                </a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

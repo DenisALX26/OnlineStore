@@ -19,6 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<WishlistProduct> WishlistProducts { get; set; }
     public DbSet<CartProduct> CartProducts { get; set; }
     public DbSet<Proposal> Proposals { get; set; }
+    public DbSet<ProductEditProposal> ProductEditProposals { get; set; }
     public DbSet<FAQ> FAQs { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
@@ -60,6 +61,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<Product>().HasOne<Category>(p => p.Category)
             .WithMany(c => c.Products)
             .HasForeignKey(p => p.CategoryId);
+
+        // M:1 For ApplicationUser and Product
+        builder.Entity<Product>().HasOne<ApplicationUser>(p => p.CreatedByUser)
+            .WithMany(u => u.Products)
+            .HasForeignKey(p => p.CreatedByUserId);
 
         // M:1 For Review and Product
         builder.Entity<Review>().HasOne<Product>(r => r.Product)

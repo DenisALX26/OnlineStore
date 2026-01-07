@@ -18,7 +18,7 @@ public class HomeController : Controller
         _db = db;
     }
 
-    public IActionResult Index(string category, string search, string price)
+    public IActionResult Index(string category, string search, string price, string rating)
     {
         var products = _db.Products
         .Include(p => p.Category)
@@ -35,6 +35,11 @@ public class HomeController : Controller
     else if (price == "low")
         products = products.OrderBy(p => p.Price);
 
+    if (rating == "high")
+        products = products.OrderByDescending(p => p.Rating);
+    else if (rating == "low")
+        products = products.OrderBy(p => p.Rating);
+
     ViewBag.Categories = _db.Categories.ToList();
     ViewBag.SelectedCategory = category;
     ViewBag.Search = search;
@@ -49,6 +54,7 @@ public class HomeController : Controller
         ViewBag.ProductsCount = _db.Products.Count();
         ViewBag.ProposalsCount = _db.Proposals.Count();
         ViewBag.UsersCount = _db.Users.Count();
+        ViewBag.ProductEditProposalsCount = _db.ProductEditProposals.Count();
         return View();
     }
 

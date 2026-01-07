@@ -1,0 +1,30 @@
+@model ProductEditProposal
+@{
+    Layout = "_AdminLayout";
+}
+
+<h3>Edit Proposal for: <b>@Model.Product.Title</b></h3>
+
+<div class="card">
+    <div class="card-body">
+
+        <p><b>New Title:</b> @Model.Title</p>
+        <p><b>New Price:</b> @Model.Price</p>
+        <p><b>New Description:</b> @Model.Description</p>
+
+        <form asp-action="Approve" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button class="btn btn-success">Approve</button>
+        </form>
+
+        <hr />
+
+        <form asp-action="Reject" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <textarea name="reason" class="form-control mb-2"
+                      placeholder="Reason for rejection"></textarea>
+            <button class="btn btn-danger">Reject</button>
+        </form>
+
+    </div>
+</div>

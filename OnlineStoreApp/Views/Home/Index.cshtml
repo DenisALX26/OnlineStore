@@ -42,15 +42,14 @@
                 <div class="list-group list-group-flush">
 
                     <a asp-action="Index"
-                       class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == null ? "active" : "")">
+                        class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == null ? "active" : "")">
                         All Categories
                     </a>
 
                     @foreach (var cat in (ViewBag.Categories as List<Category>) ?? new List<Category>())
                     {
-                        <a asp-action="Index"
-                           asp-route-category="@cat.Type"
-                           class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == cat.Type ? "active" : "")">
+                        <a asp-action="Index" asp-route-category="@cat.Type"
+                            class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == cat.Type ? "active" : "")">
                             @cat.Type
                         </a>
                     }
@@ -62,11 +61,25 @@
                     Sort by price
                 </div>
                 <div class="card-body">
-                    <a asp-route-price="high" class="btn btn-outline-secondary w-100 mb-2">
+                    <a asp-route-price="low" class="btn btn-outline-secondary w-100 mb-2">
                         Price ↑
                     </a>
-                    <a asp-route-price="low" class="btn btn-outline-secondary w-100">
+                    <a asp-route-price="high" class="btn btn-outline-secondary w-100">
                         Price ↓
+                    </a>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header fw-bold">
+                    Sort by rating
+                </div>
+                <div class="card-body">
+                    <a asp-route-rating="low" class="btn btn-outline-secondary w-100 mb-2">
+                        Rating ↑
+                    </a>
+                    <a asp-route-rating="high" class="btn btn-outline-secondary w-100">
+                        Rating ↓
                     </a>
                 </div>
             </div>
@@ -86,17 +99,17 @@
 
                             @if (!string.IsNullOrWhiteSpace(product.Image))
                             {
-                                <div class="card-img-top" style="width: 100%; aspect-ratio: 1 / 1; overflow: hidden; padding: 10px; background-color: #f8f9fa;">
-                                    <img src="@product.Image"
-                                         style="width: 100%; height: 100%; object-fit: cover;"
-                                         alt="@product.Title"
-                                         onerror="this.onerror=null; this.src='/images/placeholder.jpg'; this.alt='Image not found';" />
+                                <div class="card-img-top"
+                                    style="width: 100%; aspect-ratio: 1 / 1; overflow: hidden; padding: 10px; background-color: #f8f9fa;">
+                                    <img src="@product.Image" style="width: 100%; height: 100%; object-fit: cover;"
+                                        alt="@product.Title"
+                                        onerror="this.onerror=null; this.src='/images/placeholder.jpg'; this.alt='Image not found';" />
                                 </div>
                             }
                             else
                             {
                                 <div class="card-img-top d-flex align-items-center justify-content-center bg-light"
-                                     style="width: 100%; aspect-ratio: 1 / 1; padding: 10px;">
+                                    style="width: 100%; aspect-ratio: 1 / 1; padding: 10px;">
                                     <span class="text-muted">No image</span>
                                 </div>
                             }
@@ -115,6 +128,8 @@
                                 <span class="badge bg-info mb-2">
                                     @product.Type
                                 </span>
+
+                                <p class="mb-2 fw-bold">@product.Rating / 5 ☆</p>
 
                                 <p class="fw-bold mt-auto mb-2 text-success">
                                     @product.Price.ToString("0.00") RON

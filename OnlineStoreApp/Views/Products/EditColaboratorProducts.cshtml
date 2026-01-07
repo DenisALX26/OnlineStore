@@ -1,7 +1,8 @@
-﻿@model OnlineStoreApp.Models.Product
+@model OnlineStoreApp.Models.ProductEditProposal
+
 @{
     Layout = "_AdminLayout";
-    ViewData["Title"] = "Edit Product";
+    ViewData["Title"] = "Edit Product (Pending Approval)";
 }
 
 <section class="content">
@@ -10,18 +11,27 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
 
-                <div class="card card-primary card-outline">
+                <div class="card card-warning card-outline">
+
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-edit mr-2"></i>
-                            Edit Product
+                            Edit Product - Approval Required
                         </h3>
                     </div>
 
-                    <form asp-action="Edit" method="post">
+                    <form asp-controller="Products" asp-action="EditColaboratorProducts" method="post">
+
                         <div class="card-body">
 
-                            <input type="hidden" asp-for="Id" />
+                            <!-- Hidden fields -->
+                            <input type="hidden" asp-for="ProductId" />
+                            <input type="hidden" asp-for="UserId" />
+
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Any change you submit will need admin approval before going live.
+                            </div>
 
                             <div class="form-group">
                                 <label asp-for="Title"></label>
@@ -37,37 +47,33 @@
 
                             <div class="form-group">
                                 <label asp-for="Description"></label>
-                                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
 
                             <div class="form-group">
                                 <label asp-for="CategoryId">Category</label>
-                                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories">
+                                <select asp-for="CategoryId"
+                                        class="form-control"
+                                        asp-items="ViewBag.Categories">
                                     <option value="">-- Select Category --</option>
                                 </select>
                                 <span asp-validation-for="CategoryId" class="text-danger"></span>
                             </div>
 
-                            <div class="form-group">
-                                <label asp-for="Type">Side</label>
-                                <select asp-for="Type" class="form-control">
-                                    <option value="Left">Left</option>
-                                    <option value="Right">Right</option>
-                                </select>
-                            </div>
-
                         </div>
 
                         <div class="card-footer text-right">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Save Changes
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-paper-plane"></i>
+                                Submit for Approval
                             </button>
 
                             <a asp-action="Index" class="btn btn-secondary ml-2">
                                 Cancel
                             </a>
                         </div>
+
                     </form>
 
                 </div>
@@ -77,3 +83,7 @@
 
     </div>
 </section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
