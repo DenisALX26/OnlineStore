@@ -27,6 +27,8 @@ namespace OnlineStoreApp.Models
         public ICollection<Review>? Reviews { get; set; }   
         public ICollection<WishlistProduct>? WishlistProducts { get; set; }
         public ICollection<CartProduct>? CartProducts { get; set; }
-
+        public string CreatedByUserId { get; set; } = string.Empty;
+        public ApplicationUser? CreatedByUser { get; set; }
+        public ProductStatus Status { get; set; } = ProductStatus.Active;
     }
 }

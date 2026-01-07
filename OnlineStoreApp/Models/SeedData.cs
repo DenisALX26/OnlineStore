@@ -172,7 +172,9 @@ public class SeedData
                     Image = "/images/classic-white-sneakers.jpg",
                     Rating = 4.5,
                     Stock = 50,
-                    CategoryId = sneakersCat.Id
+                    CategoryId = sneakersCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 },
                 new Product
                 {
@@ -183,7 +185,9 @@ public class SeedData
                     Image = "/images/black-hightop-sneakers.jpg",
                     Rating = 4.7,
                     Stock = 35,
-                    CategoryId = sneakersCat.Id
+                    CategoryId = sneakersCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 },
                 new Product
                 {
@@ -194,7 +198,9 @@ public class SeedData
                     Image = "/images/retro-sneakers.jpg",
                     Rating = 4.6,
                     Stock = 42,
-                    CategoryId = sneakersCat.Id
+                    CategoryId = sneakersCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 },
                 new Product
                 {
@@ -205,7 +211,9 @@ public class SeedData
                     Image = "/images/minimalist-white-sneakers.jpg",
                     Rating = 4.4,
                     Stock = 55,
-                    CategoryId = sneakersCat.Id
+                    CategoryId = sneakersCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 },
                 // Boots
                 new Product
@@ -217,7 +225,9 @@ public class SeedData
                     Image = "/images/leather-ankle-boots.jpg",
                     Rating = 4.8,
                     Stock = 25,
-                    CategoryId = bootsCat.Id
+                    CategoryId = bootsCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 },
                 new Product
                 {
@@ -228,7 +238,9 @@ public class SeedData
                     Image = "/images/combat-boots.jpg",
                     Rating = 4.6,
                     Stock = 30,
-                    CategoryId = bootsCat.Id
+                    CategoryId = bootsCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 },
                 new Product
                 {
@@ -239,7 +251,9 @@ public class SeedData
                     Image = "/images/chelsea-boots.jpg",
                     Rating = 4.7,
                     Stock = 28,
-                    CategoryId = bootsCat.Id
+                    CategoryId = bootsCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 },
                 // Running Shoes
                 new Product
@@ -251,7 +265,9 @@ public class SeedData
                     Image = "/images/ultra-lightweight-running.jpg",
                     Rating = 4.9,
                     Stock = 40,
-                    CategoryId = runningCat.Id
+                    CategoryId = runningCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 },
                 new Product
                 {
@@ -262,7 +278,9 @@ public class SeedData
                     Image = "/images/trail-running-shoes.jpg",
                     Rating = 4.7,
                     Stock = 28,
-                    CategoryId = runningCat.Id
+                    CategoryId = runningCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 },
                 new Product
                 {
@@ -273,7 +291,9 @@ public class SeedData
                     Image = "/images/marathon-running-shoes.jpg",
                     Rating = 4.8,
                     Stock = 32,
-                    CategoryId = runningCat.Id
+                    CategoryId = runningCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 },
                 // Casual Shoes
                 new Product
@@ -285,7 +305,9 @@ public class SeedData
                     Image = "/images/canvas-slipon.jpg",
                     Rating = 4.3,
                     Stock = 60,
-                    CategoryId = casualCat.Id
+                    CategoryId = casualCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 },
                 new Product
                 {
@@ -296,7 +318,9 @@ public class SeedData
                     Image = "/images/loafers.jpg",
                     Rating = 4.5,
                     Stock = 38,
-                    CategoryId = casualCat.Id
+                    CategoryId = casualCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 },
                 // Sandals
                 new Product
@@ -308,7 +332,9 @@ public class SeedData
                     Image = "/images/beach-sandals.jpg",
                     Rating = 4.4,
                     Stock = 45,
-                    CategoryId = sandalsCat.Id
+                    CategoryId = sandalsCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 },
                 new Product
                 {
@@ -319,7 +345,9 @@ public class SeedData
                     Image = "/images/sport-sandals.jpg",
                     Rating = 4.5,
                     Stock = 33,
-                    CategoryId = sandalsCat.Id
+                    CategoryId = sandalsCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 },
                 // Formal Shoes
                 new Product
@@ -331,7 +359,9 @@ public class SeedData
                     Image = "/images/oxford-dress-shoes.jpg",
                     Rating = 4.8,
                     Stock = 20,
-                    CategoryId = formalCat.Id
+                    CategoryId = formalCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 },
                 new Product
                 {
@@ -342,7 +372,9 @@ public class SeedData
                     Image = "/images/derby-shoes.jpg",
                     Rating = 4.7,
                     Stock = 22,
-                    CategoryId = formalCat.Id
+                    CategoryId = formalCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
                 }
             };
 

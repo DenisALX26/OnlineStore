@@ -255,19 +255,24 @@ namespace OnlineStoreApp.Controllers
                 await _db.SaveChangesAsync();
             }
 
-            var new_product = new Product
+            var sides = new[] { Models.Type.Left, Models.Type.Right };
+            for (int i = 0; i < sides.Length; i++)
             {
-                Title = proposal.Title,
-                Description = proposal.Description,
-                Price = proposal.Price,
-                Image = proposal.Image,
-                CategoryId = category.Id,
-                Stock = 0,
-                Rating = 0.0,
-                Type = Models.Type.Left
-            };
+                var new_product = new Product
+                {
+                    Title = proposal.Title,
+                    Description = proposal.Description,
+                    Price = proposal.Price,
+                    Image = proposal.Image,
+                    CategoryId = category.Id,
+                    Stock = 10,
+                    Rating = 0.0,
+                    Type = sides[i],
+                    CreatedByUserId = proposal.UserId
+                };
 
-            _db.Products.Add(new_product);
+                _db.Products.Add(new_product);
+            }
             proposal.Status = ProposalStatus.Accepted;
             await _db.SaveChangesAsync();
 

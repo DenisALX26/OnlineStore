@@ -9,11 +9,8 @@
     <div class="row mb-4">
         <div class="col-md-6 mx-auto">
             <form asp-controller="Home" asp-action="Index" method="get" class="d-flex">
-                <input type="text"
-                       name="search"
-                       value="@ViewBag.Search"
-                       class="form-control me-2"
-                       placeholder="Search products..." />
+                <input type="text" name="search" value="@ViewBag.Search" class="form-control me-2"
+                    placeholder="Search products..." />
                 <button class="btn btn-primary">
                     Search
                 </button>
@@ -34,15 +31,14 @@
                 <div class="list-group list-group-flush">
 
                     <a asp-action="Index"
-                       class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == null ? "active" : "")">
+                        class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == null ? "active" : "")">
                         All Categories
                     </a>
 
                     @foreach (var cat in ViewBag.Categories as List<Category>)
                     {
-                        <a asp-action="Index"
-                           asp-route-category="@cat.Type"
-                           class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == cat.Type ? "active" : "")">
+                        <a asp-action="Index" asp-route-category="@cat.Type"
+                            class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == cat.Type ? "active" : "")">
                             @cat.Type
                         </a>
                     }
@@ -92,17 +88,17 @@
 
                             @if (!string.IsNullOrWhiteSpace(product.Image))
                             {
-                                <div class="card-img-top" style="width: 100%; aspect-ratio: 1 / 1; overflow: hidden; padding: 10px; background-color: #f8f9fa;">
-                                    <img src="@product.Image"
-                                         style="width: 100%; height: 100%; object-fit: cover;"
-                                         alt="@product.Title"
-                                         onerror="this.onerror=null; this.src='/images/placeholder.jpg'; this.alt='Image not found';" />
+                                <div class="card-img-top"
+                                    style="width: 100%; aspect-ratio: 1 / 1; overflow: hidden; padding: 10px; background-color: #f8f9fa;">
+                                    <img src="@product.Image" style="width: 100%; height: 100%; object-fit: cover;"
+                                        alt="@product.Title"
+                                        onerror="this.onerror=null; this.src='/images/placeholder.jpg'; this.alt='Image not found';" />
                                 </div>
                             }
                             else
                             {
                                 <div class="card-img-top d-flex align-items-center justify-content-center bg-light"
-                                     style="width: 100%; aspect-ratio: 1 / 1; padding: 10px;">
+                                    style="width: 100%; aspect-ratio: 1 / 1; padding: 10px;">
                                     <span class="text-muted">No image</span>
                                 </div>
                             }
@@ -133,38 +129,43 @@
                                 {
                                     <div class="d-grid gap-2">
 
-                                        <a asp-controller="Products"
-                                           asp-action="Details"
-                                           asp-route-id="@product.Id"
-                                           class="btn btn-primary">
+                                        <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id"
+                                            class="btn btn-primary">
                                             View
                                         </a>
 
-                                        <form asp-controller="Wishlist"
-                                              asp-action="Add"
-                                              asp-route-productId="@product.Id"
-                                              method="post">
-                                            <button class="btn btn-outline-danger w-100">
+                                        @if (User.IsInRole("Customer"))
+                                        {
+                                            <form asp-controller="Wishlist" asp-action="Add" asp-route-productId="@product.Id"
+                                                method="post">
+                                                <button class="btn btn-outline-danger w-100">
+                                                    ❤️ Wishlist
+                                                </button>
+                                            </form>
+
+                                            <form asp-controller="Cart" asp-action="Add" asp-route-productId="@product.Id"
+                                                method="post">
+                                                <button class="btn btn-outline-success w-100">
+                                                    🛒 Add to cart
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-outline-danger w-100"
+                                                onclick="alert('Rolul tau de utilizator nu are wishlist')">
                                                 ❤️ Wishlist
                                             </button>
-                                        </form>
-
-                                        <form asp-controller="Cart"
-                                              asp-action="Add"
-                                              asp-route-productId="@product.Id"
-                                              method="post">
-                                            <button class="btn btn-outline-success w-100">
+                                            <button class="btn btn-outline-success w-100"
+                                                onclick="alert('Rolul tau de utilizator nu are cart')">
                                                 🛒 Add to cart
                                             </button>
-                                        </form>
-
+                                        }
                                     </div>
                                 }
                                 else
                                 {
-                                    <a asp-area="Identity"
-                                       asp-page="/Account/Login"
-                                       class="btn btn-outline-primary w-100">
+                                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-primary w-100">
                                         Login to interact
                                     </a>
                                 }
