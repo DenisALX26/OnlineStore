@@ -7,14 +7,9 @@ namespace OnlineStoreApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AIAssistantController : ControllerBase
+    public class AIAssistantController(ApplicationDbContext context) : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-
-        public AIAssistantController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
 
         [HttpPost("ask")]
         public async Task<IActionResult> AskQuestion([FromBody] AskQuestionRequest request)
@@ -27,35 +22,32 @@ namespace OnlineStoreApp.Controllers
             var product = await _context.Products
                 .FirstOrDefaultAsync(p => p.Id == request.ProductId);
 
-            if (product != null)
-            {
-                try
-                {
-                    await _context.Entry(product)
-                        .Collection(p => p.FAQs)
-                        .LoadAsync();
-                }
-                catch (MySqlConnector.MySqlException)
-                {
-                    product.FAQs = new List<Models.FAQ>();
-                }
-            }
-
             if (product == null)
             {
                 return NotFound(new { error = "Product not found." });
             }
 
-            var normalizedQuestion = NormalizeText(request.Question);
-            var answer = FindAnswer(product, normalizedQuestion, request.Question);
+            try
+            {
+                await _context.Entry(product)
+                    .Collection(p => p.FAQs!)
+                    .LoadAsync();
+            }
+            catch (MySqlConnector.MySqlException)
+            {
+                product.FAQs = [];
+            }
 
-            return Ok(new { answer = answer });
+            var normalizedQuestion = NormalizeText(request.Question);
+            var answer = FindAnswer(product, normalizedQuestion);
+
+            return Ok(new { answer });
         }
 
-        private string FindAnswer(Models.Product product, string normalizedQuestion, string originalQuestion)
+        private static string FindAnswer(Models.Product product, string normalizedQuestion)
         {
             // 1. Search in FAQs first
-            if (product.FAQs != null && product.FAQs.Any())
+            if (product.FAQs != null && product.FAQs.Count > 0)
             {
                 foreach (var faq in product.FAQs)
                 {
@@ -70,97 +62,133 @@ namespace OnlineStoreApp.Controllers
                 }
             }
 
-            var description = NormalizeText(product.Description ?? "");
             var questionKeywords = ExtractKeywords(normalizedQuestion);
 
-            if (ContainsKeywords(normalizedQuestion, new[] { "garanție", "garantie", "warranty", "garantia" }))
+            if (ContainsKeywords(normalizedQuestion, WarrantyKeywords))
             {
                 return "Da, toate produsele noastre beneficiază de garanție de 2 ani pentru defecte de fabricație. Pentru detalii suplimentare, vă rugăm să ne contactați.";
             }
 
-            if (ContainsKeywords(normalizedQuestion, new[] { "copii", "children", "child", "kid", "kids" }))
+            if (ContainsKeywords(normalizedQuestion, ChildrenKeywords))
             {
                 return "Acest produs este recomandat pentru adulți. Pentru produse potrivite copiilor, vă recomandăm să consultați categoria dedicată sau să ne contactați pentru recomandări specifice.";
             }
 
-            if (ContainsKeywords(normalizedQuestion, new[] { "măsură", "masura", "size", "mărime", "marime", "sizes" }))
+            if (ContainsKeywords(normalizedQuestion, SizeKeywords))
             {
                 return "Produsele noastre sunt disponibile în mărimi standard de la 36 la 46. Pentru mărimi speciale sau consultanță personalizată, vă rugăm să ne contactați.";
             }
 
-            if (ContainsKeywords(normalizedQuestion, new[] { "alergare", "running", "jogging", "sport" }))
+            if (ContainsKeywords(normalizedQuestion, RunningKeywords))
             {
-                if (product.Category?.Type?.ToLower().Contains("running") == true)
+                if (product.Category?.Type?.ToLower().Contains("running", StringComparison.OrdinalIgnoreCase) == true)
                 {
                     return "Da, acest produs este special proiectat pentru alergare și oferă suport excelent și amortizare pentru activități sportive.";
                 }
                 return "Acest produs este proiectat pentru uz zilnic și confort. Pentru alergare, recomandăm produsele din categoria Running Shoes care oferă suport specializat.";
             }
 
-            if (ContainsKeywords(normalizedQuestion, new[] { "curățare", "curatare", "clean", "washing", "spălare", "spalare" }))
+            if (ContainsKeywords(normalizedQuestion, CleaningKeywords))
             {
                 return "Recomandăm curățarea cu o cârpă umedă și un detergent blând. Evitați mașina de spălat și uscarea la soare direct pentru a menține calitatea produsului.";
             }
 
-            if (ContainsKeywords(normalizedQuestion, new[] { "returnare", "return", "schimb", "exchange" }))
+            if (ContainsKeywords(normalizedQuestion, ReturnKeywords))
             {
                 return "Puteți returna produsul în termen de 14 zile de la cumpărare, în condiții originale, cu bonul fiscal. Pentru detalii despre procesul de returnare, vă rugăm să ne contactați.";
             }
 
-            if (ContainsKeywords(normalizedQuestion, new[] { "material", "materials", "leather", "piele", "canvas", "textil" }))
+            if (ContainsKeywords(normalizedQuestion, MaterialKeywords))
             {
-                if (description.Contains("leather") || description.Contains("piele"))
+                // Extract specific material information from original description
+                var productDescription = product.Description ?? "";
+                var materialInfo = ExtractMaterialInfo(productDescription, normalizedQuestion);
+                if (!string.IsNullOrEmpty(materialInfo))
+                {
+                    return materialInfo;
+                }
+                
+                // Fallback to simple check if extraction didn't find anything
+                var normalizedDesc = NormalizeText(productDescription);
+                if (normalizedDesc.Contains("leather") || normalizedDesc.Contains("piele"))
                 {
                     return "Acest produs este confecționat din piele naturală de înaltă calitate, ceea ce asigură durabilitate și confort pe termen lung.";
                 }
-                if (description.Contains("canvas") || description.Contains("textil"))
+                if (normalizedDesc.Contains("canvas") || normalizedDesc.Contains("textil"))
                 {
                     return "Acest produs este confecționat din materiale textile de calitate, oferind confort și respirabilitate excelentă.";
                 }
             }
 
-            var relevantInfo = ExtractRelevantInfo(description, questionKeywords);
+            // Try to extract relevant information from description (use original description, not normalized)
+            var productDescription2 = product.Description ?? "";
+            var relevantInfo = ExtractRelevantInfo(productDescription2, normalizedQuestion, questionKeywords);
             if (!string.IsNullOrEmpty(relevantInfo))
             {
+                // Limit response length to keep it concise
+                if (relevantInfo.Length > 300)
+                {
+                    // Take first 300 characters and find the last complete sentence
+                    var truncated = relevantInfo[..300];
+                    var lastPeriod = truncated.LastIndexOf('.');
+                    if (lastPeriod > 200) // Only truncate at sentence boundary if it's not too short
+                    {
+                        return truncated[..(lastPeriod + 1)];
+                    }
+                    return truncated.TrimEnd() + "...";
+                }
                 return relevantInfo;
             }
 
             return "Momentan nu avem detalii specifice despre acest aspect. Vă recomandăm să ne contactați direct pentru informații suplimentare despre produs. Suntem aici să vă ajutăm!";
         }
 
-        private string NormalizeText(string text)
+        private static readonly Regex DiacriticsRegex = new(@"[ăâîșț]", RegexOptions.Compiled);
+        private static readonly Regex NonAlphanumericRegex = new(@"[^a-z0-9\s]", RegexOptions.Compiled);
+        private static readonly Regex SentenceSplitRegex = new(@"(?<=[.!?])\s+", RegexOptions.Compiled);
+
+        private static string NormalizeText(string text)
         {
             if (string.IsNullOrEmpty(text))
                 return "";
 
             text = text.ToLower();
-            text = Regex.Replace(text, @"[ăâîșț]", m =>
+            text = DiacriticsRegex.Replace(text, m =>
             {
                 var map = new Dictionary<string, string>
                 {
                     { "ă", "a" }, { "â", "a" }, { "î", "i" },
                     { "ș", "s" }, { "ț", "t" }
                 };
-                return map.ContainsKey(m.Value) ? map[m.Value] : m.Value;
+                return map.TryGetValue(m.Value, out var value) ? value : m.Value;
             });
 
-            text = Regex.Replace(text, @"[^a-z0-9\s]", "");
+            text = NonAlphanumericRegex.Replace(text, "");
             return text.Trim();
         }
 
-        private string[] ExtractKeywords(string text)
+        private static readonly string[] StopWords = ["este", "sunt", "are", "cum", "ce", "care", "pentru", "cu", "de", "la", "in", "pe", "si", "sau", "the", "is", "how", "what", "which", "for", "with", "of", "to", "on", "and", "or"];
+        private static readonly string[] WarrantyKeywords = ["garanție", "garantie", "warranty", "garantia"];
+        private static readonly string[] ChildrenKeywords = ["copii", "children", "child", "kid", "kids"];
+        private static readonly string[] SizeKeywords = ["măsură", "masura", "size", "mărime", "marime", "sizes"];
+        private static readonly string[] RunningKeywords = ["alergare", "running", "jogging", "sport"];
+        private static readonly string[] CleaningKeywords = ["curățare", "curatare", "clean", "washing", "spălare", "spalare"];
+        private static readonly string[] ReturnKeywords = ["returnare", "return", "schimb", "exchange"];
+        private static readonly string[] MaterialKeywords = ["material", "materials", "leather", "piele", "canvas", "textil", "cauciuc", "rubber"];
+        private static readonly char[] WordSeparators = [' ', '\t', '\n'];
+
+        private static string[] ExtractKeywords(string text)
         {
-            var stopWords = new[] { "este", "sunt", "are", "cum", "ce", "care", "pentru", "cu", "de", "la", "in", "pe", "si", "sau", "the", "is", "are", "how", "what", "which", "for", "with", "of", "to", "in", "on", "and", "or" };
-            var words = text.Split(new[] { ' ', '\t', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            return words.Where(w => !stopWords.Contains(w) && w.Length > 2).ToArray();
+            var words = text.Split(WordSeparators, StringSplitOptions.RemoveEmptyEntries);
+            return Array.FindAll(words, w => !StopWords.Contains(w) && w.Length > 2);
         }
 
-        private bool ContainsKeywords(string text, string[] keywords)
+        private static bool ContainsKeywords(string text, string[] keywords)
         {
             return keywords.Any(keyword => text.Contains(keyword));
         }
 
-        private double CalculateSimilarity(string str1, string str2)
+        private static double CalculateSimilarity(string str1, string str2)
         {
             if (string.IsNullOrEmpty(str1) || string.IsNullOrEmpty(str2))
                 return 0;
@@ -174,24 +202,155 @@ namespace OnlineStoreApp.Controllers
             return totalWords > 0 ? (double)commonWords / totalWords : 0;
         }
 
-        private string ExtractRelevantInfo(string description, string[] keywords)
+        private static string ExtractRelevantInfo(string originalDescription, string normalizedQuestion, string[] keywords)
         {
-            if (string.IsNullOrEmpty(description) || keywords.Length == 0)
+            if (string.IsNullOrEmpty(originalDescription) || keywords.Length == 0)
                 return "";
 
-            var sentences = description.Split(new[] { '.', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
-            var relevantSentences = sentences.Where(s =>
-            {
-                var normalizedSentence = NormalizeText(s);
-                return keywords.Any(k => normalizedSentence.Contains(k));
-            }).Take(2).ToList();
+            // Split by sentences, keeping punctuation
+            var sentences = SentenceSplitRegex.Split(originalDescription)
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .Select(s => s.Trim())
+                .ToList();
 
-            if (relevantSentences.Any())
+            if (sentences.Count == 0)
+                return "";
+
+            // Expand keywords to include variations and synonyms
+            var expandedKeywords = ExpandKeywords(keywords);
+
+            // Score each sentence based on keyword matches with better algorithm
+            var scoredSentences = sentences.Select((sentence, index) =>
             {
-                return string.Join(" ", relevantSentences).Trim() + ".";
+                var normalizedSentence = NormalizeText(sentence);
+                var originalSentence = sentence;
+                
+                // Calculate score based on multiple factors
+                double score = 0;
+                
+                // 1. Exact keyword matches (highest priority)
+                foreach (var keyword in expandedKeywords)
+                {
+                    if (normalizedSentence.Contains(keyword))
+                    {
+                        // Higher score for longer, more specific keywords
+                        var keywordWeight = keyword.Length > 4 ? 3.0 : (keyword.Length > 2 ? 2.0 : 1.0);
+                        score += keywordWeight;
+                        
+                        // Bonus if keyword appears multiple times
+                        var count = Regex.Matches(normalizedSentence, Regex.Escape(keyword)).Count;
+                        if (count > 1)
+                            score += 0.5;
+                    }
+                }
+                
+                // 2. Check for question-specific terms in the sentence
+                var questionWords = normalizedQuestion.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .Where(w => w.Length > 3)
+                    .ToList();
+                
+                var matchingQuestionWords = questionWords.Count(qw => normalizedSentence.Contains(qw));
+                if (matchingQuestionWords > 0)
+                {
+                    score += matchingQuestionWords * 1.5; // Higher weight for question word matches
+                }
+                
+                // 3. Prefer sentences that are more specific (not too long, not too short)
+                if (sentence.Length > 30 && sentence.Length < 200)
+                    score += 0.5;
+                
+                return new { 
+                    Sentence = originalSentence, 
+                    Normalized = normalizedSentence,
+                    Score = score,
+                    Index = index
+                };
+            })
+            .Where(x => x.Score > 0)
+            .OrderByDescending(x => x.Score)
+            .ToList();
+
+            if (scoredSentences.Count == 0)
+                return "";
+
+            // Take top scoring sentences (but ensure they're actually relevant)
+            var topSentences = scoredSentences
+                .Where(x => x.Score >= 1.0) // Minimum relevance threshold
+                .Take(2) // Reduce to 2 most relevant sentences
+                .ToList();
+
+            if (topSentences.Count == 0)
+                return "";
+
+            // If we have multiple sentences, check if they're related
+            if (topSentences.Count > 1)
+            {
+                var indices = topSentences.Select(x => x.Index).OrderBy(i => i).ToList();
+                
+                // If sentences are consecutive or very close, include both
+                if (indices[1] - indices[0] <= 2)
+                {
+                    var result = string.Join(" ", topSentences.OrderBy(x => x.Index).Select(x => x.Sentence)).Trim();
+                    if (!result.EndsWith('.') && !result.EndsWith('!') && !result.EndsWith('?'))
+                        result += ".";
+                    return result;
+                }
             }
 
-            return "";
+            // Return only the most relevant sentence
+            var bestSentence = topSentences.First().Sentence.Trim();
+            if (!bestSentence.EndsWith('.') && !bestSentence.EndsWith('!') && !bestSentence.EndsWith('?'))
+                bestSentence += ".";
+                
+            return bestSentence;
+        }
+
+        private static string[] ExpandKeywords(string[] keywords)
+        {
+            var expanded = new List<string>(keywords);
+            
+            // Add variations and synonyms
+            var synonymMap = new Dictionary<string, string[]>
+            {
+                { "material", ["material", "materiale", "fabricat", "realizat", "confectionat"] },
+                { "piele", ["piele", "leather", "piele naturala", "piele de vita"] },
+                { "cauciuc", ["cauciuc", "rubber", "talpa", "talpa exterioara"] },
+                { "curatare", ["curatare", "curat", "spalare", "intretinere", "clean", "washing"] },
+                { "marime", ["marime", "masura", "size", "sizes", "disponibil"] },
+                { "garantie", ["garantie", "garantia", "warranty", "garantie de"] },
+                { "livrare", ["livrare", "livrat", "delivery", "shipping", "trimis"] },
+                { "returnare", ["returnare", "return", "returnat", "schimb", "exchange"] },
+                { "impermeabil", ["impermeabil", "waterproof", "rezistent la apa", "apa"] },
+                { "iarna", ["iarna", "winter", "zapada", "frig", "rece"] },
+                { "vara", ["vara", "summer", "cald", "caldura"] },
+                { "alergare", ["alergare", "running", "jogging", "sport", "maraton"] },
+                { "hiking", ["hiking", "trekking", "drumetie", "outdoor", "montan"] }
+            };
+            
+            foreach (var keyword in keywords)
+            {
+                foreach (var kvp in synonymMap)
+                {
+                    if (kvp.Value.Any(v => v.Contains(keyword) || keyword.Contains(v)))
+                    {
+                        expanded.AddRange(kvp.Value);
+                    }
+                }
+            }
+            
+            // Remove duplicates and return
+            return [.. expanded.Distinct()];
+        }
+
+        private static string ExtractMaterialInfo(string originalDescription, string normalizedQuestion)
+        {
+            if (string.IsNullOrEmpty(originalDescription))
+                return "";
+
+            // Use the improved extraction method with material-specific keywords
+            var materialKeywords = new[] { "piele", "leather", "canvas", "textil", "cauciuc", "rubber", "material", "materials", "eva", "sintetic", "synthetic", "premium", "calitate", "fabricat", "realizat", "confectionat" };
+            
+            return ExtractRelevantInfo(originalDescription, normalizedQuestion, materialKeywords);
         }
     }
 

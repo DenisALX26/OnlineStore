@@ -688,6 +688,17 @@ main {
   color: #60a5fa !important;
 }
 
+/* Product description text visibility in dark theme */
+[data-theme="dark"] .text-muted {
+  color: #cbd5e1 !important; /* Lighter gray for better visibility */
+}
+
+/* Specifically for product description paragraph */
+[data-theme="dark"] .card-body .text-muted,
+[data-theme="dark"] p.text-muted {
+  color: #e2e8f0 !important; /* Even lighter for main description text */
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .hero-section h1 {
