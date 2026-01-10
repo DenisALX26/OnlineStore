@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OnlineStoreApp.Data;
+using System.IO;
 
 namespace OnlineStoreApp.Models;
 
@@ -10,7 +11,7 @@ public class SeedData
     {
         using var context = new ApplicationDbContext(
     serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>());
-        
+
         // Seed Roles and Users only if they don't exist
         if (!context.Roles.Any())
         {
@@ -47,7 +48,7 @@ public class SeedData
                     NormalizedEmail = "ADMIN@TEST.COM",
                     Email = "admin@test.com",
                     NormalizedUserName = "ADMIN@TEST.COM",
-                PasswordHash = hasher.HashPassword(
+                    PasswordHash = hasher.HashPassword(
                     new ApplicationUser { UserName = "admin@test.com", Wishlist = new Wishlist(), Cart = new Cart() }, "Admin123!"),
                     Wishlist = new Wishlist(),
                     Cart = new Cart()
@@ -60,8 +61,8 @@ public class SeedData
                     NormalizedEmail = "COLABORATOR@TEST.COM",
                     Email = "colaborator@test.com",
                     NormalizedUserName = "COLABORATOR@TEST.COM",
-                PasswordHash = hasher.HashPassword(
-                    new ApplicationUser { UserName = "colaborator@test.com", Wishlist = new Wishlist(), Cart = new Cart()    }, "Colaborator123!"),
+                    PasswordHash = hasher.HashPassword(
+                    new ApplicationUser { UserName = "colaborator@test.com", Wishlist = new Wishlist(), Cart = new Cart() }, "Colaborator123!"),
                     Wishlist = new Wishlist(),
                     Cart = new Cart()
                 },
@@ -73,7 +74,7 @@ public class SeedData
                     NormalizedEmail = "CUSTOMER@TEST.COM",
                     Email = "customer@test.com",
                     NormalizedUserName = "CUSTOMER@TEST.COM",
-                PasswordHash = hasher.HashPassword(
+                    PasswordHash = hasher.HashPassword(
                     new ApplicationUser { UserName = "customer@test.com", Wishlist = new Wishlist(), Cart = new Cart() }, "Customer123!"),
                     Wishlist = new Wishlist(),
                     Cart = new Cart()
@@ -87,7 +88,7 @@ public class SeedData
                     NormalizedEmail = "GUEST@TEST.COM",
                     Email = "guest@test.com",
                     NormalizedUserName = "GUEST@TEST.COM",
-                PasswordHash = hasher.HashPassword(
+                    PasswordHash = hasher.HashPassword(
                     new ApplicationUser { UserName = "guest@test.com", Wishlist = new Wishlist(), Cart = new Cart() }, "Guest123!"),
                     Wishlist = new Wishlist(),
                     Cart = new Cart()
@@ -121,7 +122,7 @@ public class SeedData
                 {
                     RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7212",
                     UserId = "8e445865-a24d-4543-a6c6-9443d048cdb11"
-            }
+                }
         );
 
             context.SaveChanges();
@@ -160,8 +161,166 @@ public class SeedData
                 throw new InvalidOperationException("One or more required categories are missing.");
             }
 
+            var shoesSides = new[] { Type.Left, Type.Right };
+
             var products = new List<Product>
             {
+                // Real shoes data
+                new ()
+                {
+                    Title = "Nike Air Force 1 Low '07 White",
+                    Description = "The Nike Air Force 1 Low '07 in White is a timeless classic that combines style and comfort. Featuring a clean white leather upper, this iconic sneaker offers durability and a sleek look. The encapsulated Air-Sole unit provides cushioning for all-day wear, while the rubber outsole ensures traction on various surfaces. Perfect for everyday wear, the Air Force 1 Low '07 White is a versatile addition to any sneaker collection.",
+                    Price = 299.99,
+                    Type = Type.Left,
+                    Image = "/images/seed/af1_low_white_07.avif",
+                    Rating = 4.8,
+                    Stock = 100,
+                    CategoryId = sneakersCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },new ()
+                {
+                    Title = "Nike Air Force 1 Low '07 White",
+                    Description = "The Nike Air Force 1 Low '07 in White is a timeless classic that combines style and comfort. Featuring a clean white leather upper, this iconic sneaker offers durability and a sleek look. The encapsulated Air-Sole unit provides cushioning for all-day wear, while the rubber outsole ensures traction on various surfaces. Perfect for everyday wear, the Air Force 1 Low '07 White is a versatile addition to any sneaker collection.",
+                    Price = 299.99,
+                    Type = Type.Right,
+                    Image = "/images/seed/af1_low_white_07.avif",
+                    Rating = 4.8,
+                    Stock = 100,
+                    CategoryId = sneakersCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
+                new ()
+                {
+                    Title = "Crocs Classic Clog Lightning McQueen",
+                    Description = "The Crocs Classic Clog Lightning McQueen edition brings the fun and excitement of Disney Pixar's Cars to your feet. Featuring a vibrant red design with Lightning McQueen graphics, these clogs are perfect for kids and fans of the movie. Made from Croslite™ material, they provide lightweight comfort and durability. The ventilated design ensures breathability, while the slip-on style makes them easy to wear. Whether for casual outings or playtime, these Crocs add a touch of racing fun to any outfit.",
+                    Price = 149.99,
+                    Type = Type.Left,
+                    Image = "/images/seed/lighting_mcqueen.avif",
+                    Rating = 4.5,
+                    Stock = 80,
+                    CategoryId = casualCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
+                new ()
+                {
+                    Title = "Crocs Classic Clog Lightning McQueen",
+                    Description = "The Crocs Classic Clog Lightning McQueen edition brings the fun and excitement of Disney Pixar's Cars to your feet. Featuring a vibrant red design with Lightning McQueen graphics, these clogs are perfect for kids and fans of the movie. Made from Croslite™ material, they provide lightweight comfort and durability. The ventilated design ensures breathability, while the slip-on style makes them easy to wear. Whether for casual outings or playtime, these Crocs add a touch of racing fun to any outfit.",
+                    Price = 149.99,
+                    Type = Type.Right,
+                    Image = "/images/seed/lighting_mcqueen.avif",
+                    Rating = 4.5,
+                    Stock = 80,
+                    CategoryId = casualCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
+                new()
+                {
+                    Title = "adidas Yeezy Boost 350 V2 MX Dark Salt",
+                    Description = "The adidas Yeezy Boost 350 V2 MX Dark Salt is a stylish and comfortable sneaker designed in collaboration with Kanye West. Featuring a unique blend of dark and light grey tones, this sneaker offers a modern and versatile look. The Primeknit upper provides a snug and adaptive fit, while the Boost midsole delivers exceptional cushioning and energy return. With its distinctive design and premium materials, the Yeezy Boost 350 V2 MX Dark Salt is perfect for sneaker enthusiasts looking to make a statement.",
+                    Price = 279.99,
+                    Type = Type.Left,
+                    Image = "/images/seed/yeezy_boost_350.avif",
+                    Rating = 4.5,
+                    Stock = 50,
+                    CategoryId = sneakersCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
+                new()
+                {
+                    Title = "adidas Yeezy Boost 350 V2 MX Dark Salt",
+                    Description = "The adidas Yeezy Boost 350 V2 MX Dark Salt is a stylish and comfortable sneaker designed in collaboration with Kanye West. Featuring a unique blend of dark and light grey tones, this sneaker offers a modern and versatile look. The Primeknit upper provides a snug and adaptive fit, while the Boost midsole delivers exceptional cushioning and energy return. With its distinctive design and premium materials, the Yeezy Boost 350 V2 MX Dark Salt is perfect for sneaker enthusiasts looking to make a statement.",
+                    Price = 279.99,
+                    Type = Type.Right,
+                    Image = "/images/seed/yeezy_boost_350.avif",
+                    Rating = 4.5,
+                    Stock = 50,
+                    CategoryId = sneakersCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
+                new()
+                {
+                    Title = "adidas Yeezy Foam RNR Onyx",
+                    Description = "The adidas Yeezy Foam RNR Onyx is a bold and innovative footwear option designed in collaboration with Kanye West. Featuring a sleek black design, these foam runners offer a futuristic look combined with exceptional comfort. Made from lightweight EVA foam, they provide cushioning and support for all-day wear. The slip-on style ensures easy on and off, while the unique silhouette makes a statement wherever you go. Perfect for casual outings or lounging, the Yeezy Foam RNR Onyx combines style and functionality in one eye-catching package.",
+                    Price = 179.99,
+                    Type = Type.Right,
+                    Image = "/images/seed/yeezy_foam.avif",
+                    Rating = 4.2,
+                    Stock = 30,
+                    CategoryId = casualCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
+                new()
+                {
+                    Title = "adidas Yeezy Foam RNR Onyx",
+                    Description = "The adidas Yeezy Foam RNR Onyx is a bold and innovative footwear option designed in collaboration with Kanye West. Featuring a sleek black design, these foam runners offer a futuristic look combined with exceptional comfort. Made from lightweight EVA foam, they provide cushioning and support for all-day wear. The slip-on style ensures easy on and off, while the unique silhouette makes a statement wherever you go. Perfect for casual outings or lounging, the Yeezy Foam RNR Onyx combines style and functionality in one eye-catching package.",
+                    Price = 179.99,
+                    Type = Type.Left,
+                    Image = "/images/seed/yeezy_foam.avif",
+                    Rating = 4.2,
+                    Stock = 30,
+                    CategoryId = casualCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
+                new()
+                {
+                    Title = "ASICS Gel-1130 White Black",
+                    Description = "The ASICS Gel-1130 in White Black is a high-performance running shoe designed for comfort and support. Featuring a breathable white mesh upper with black accents, this shoe offers a sleek and modern look. The GEL cushioning system provides excellent shock absorption, while the durable rubber outsole ensures traction on various surfaces. With its lightweight design and responsive fit, the ASICS Gel-1130 White Black is perfect for runners seeking both style and functionality.",
+                    Price = 219.99,
+                    Type = Type.Left,
+                    Image = "/images/seed/asics.avif",
+                    Rating = 4.3,
+                    Stock = 40,
+                    CategoryId = sneakersCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
+                new()
+                {
+                    Title = "ASICS Gel-1130 White Black",
+                    Description = "The ASICS Gel-1130 in White Black is a high-performance running shoe designed for comfort and support. Featuring a breathable white mesh upper with black accents, this shoe offers a sleek and modern look. The GEL cushioning system provides excellent shock absorption, while the durable rubber outsole ensures traction on various surfaces. With its lightweight design and responsive fit, the ASICS Gel-1130 White Black is perfect for runners seeking both style and functionality.",
+                    Price = 219.99,
+                    Type = Type.Right,
+                    Image = "/images/seed/asics.avif",
+                    Rating = 4.3,
+                    Stock = 40,
+                    CategoryId = sneakersCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
+                new()
+                {
+                    Title = "Nike Kobe 6 Protro Total Orange",
+                    Description = "The Nike Kobe 6 Protro Total Orange is a striking basketball shoe that pays homage to the legendary Kobe Bryant. Featuring a vibrant orange upper with black accents, this shoe offers a bold and dynamic look on the court. The Flywire technology provides a secure fit, while the Zoom Air unit delivers responsive cushioning for quick movements. With its lightweight design and excellent traction, the Nike Kobe 6 Protro Total Orange is perfect for players looking to elevate their game with style and performance.",
+                    Price = 799.99,
+                    Type = Type.Right,
+                    Image = "/images/seed/nike_kobe.avif",
+                    Rating = 4.9,
+                    Stock = 20,
+                    CategoryId = runningCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
+                new()
+                {
+                    Title = "Nike Kobe 6 Protro Total Orange",
+                    Description = "The Nike Kobe 6 Protro Total Orange is a striking basketball shoe that pays homage to the legendary Kobe Bryant. Featuring a vibrant orange upper with black accents, this shoe offers a bold and dynamic look on the court. The Flywire technology provides a secure fit, while the Zoom Air unit delivers responsive cushioning for quick movements. With its lightweight design and excellent traction, the Nike Kobe 6 Protro Total Orange is perfect for players looking to elevate their game with style and performance.",
+                    Price = 799.99,
+                    Type = Type.Left,
+                    Image = "/images/seed/nike_kobe.avif",
+                    Rating = 4.9,
+                    Stock = 20,
+                    CategoryId = runningCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
                 // Sneakers
                 new()
                 {
@@ -218,6 +377,58 @@ public class SeedData
                 // Boots
                 new()
                 {
+                    Title = "Timberland 6 Boot Black Nubuck Premium",
+                    Description = "The Timberland 6 Boot Black Nubuck Premium is a rugged and stylish boot designed for durability and comfort. Crafted from premium black nubuck leather, these boots feature a waterproof construction to keep your feet dry in wet conditions. The padded collar provides additional ankle support, while the anti-fatigue technology ensures all-day comfort. With its iconic design and sturdy rubber outsole, the Timberland 6 Boot is perfect for outdoor adventures and urban wear alike.",
+                    Price = 449.99,
+                    Type = Type.Right,
+                    Image = "/images/seed/timberland_boot.avif",
+                    Rating = 4.9,
+                    Stock = 75,
+                    CategoryId = bootsCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
+                new()
+                {
+                    Title = "Timberland 6 Boot Black Nubuck Premium",
+                    Description = "The Timberland 6 Boot Black Nubuck Premium is a rugged and stylish boot designed for durability and comfort. Crafted from premium black nubuck leather, these boots feature a waterproof construction to keep your feet dry in wet conditions. The padded collar provides additional ankle support, while the anti-fatigue technology ensures all-day comfort. With its iconic design and sturdy rubber outsole, the Timberland 6 Boot is perfect for outdoor adventures and urban wear alike.",
+                    Price = 449.99,
+                    Type = Type.Left,
+                    Image = "/images/seed/timberland_boot.avif",
+                    Rating = 4.9,
+                    Stock = 75,
+                    CategoryId = bootsCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
+                new ()
+                {
+                    Title = "UGG Mini Bailey Bow II Chestnut",
+                    Description = "The UGG Mini Bailey Bow II in Chestnut is a stylish and cozy boot perfect for cooler weather. Featuring a soft sheepskin lining and a durable suede upper, these boots provide warmth and comfort all day long. The signature UGG sole offers excellent traction, while the decorative bow adds a touch of femininity to the classic design. Ideal for casual wear, the Mini Bailey Bow II combines fashion and function in one versatile package.",
+                    Price = 309.99,
+                    Type = Type.Right,
+                    Image = "/images/seed/ugg.avif",
+                    Rating = 4.7,
+                    Stock = 60,
+                    CategoryId = bootsCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
+                new ()
+                {
+                    Title = "UGG Mini Bailey Bow II Chestnut",
+                    Description = "The UGG Mini Bailey Bow II in Chestnut is a stylish and cozy boot perfect for cooler weather. Featuring a soft sheepskin lining and a durable suede upper, these boots provide warmth and comfort all day long. The signature UGG sole offers excellent traction, while the decorative bow adds a touch of femininity to the classic design. Ideal for casual wear, the Mini Bailey Bow II combines fashion and function in one versatile package.",
+                    Price = 309.99,
+                    Type = Type.Left,
+                    Image = "/images/seed/ugg.avif",
+                    Rating = 4.7,
+                    Stock = 60,
+                    CategoryId = bootsCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
+                new()
+                {
                     Title = "Leather Ankle Boots",
                     Description = "Premium leather ankle boots with classic design. Ideal for autumn and winter seasons.",
                     Price = 599.99,
@@ -256,6 +467,32 @@ public class SeedData
                     Status = ProductStatus.Active
                 },
                 // Running Shoes
+                new ()
+                {
+                    Title = "Nike Ja 3 Scratch 3.0",
+                    Description = "The Nike Ja 3 Scratch 3.0 is a stylish and comfortable running shoe designed for athletes and casual runners alike. Featuring a breathable mesh upper and responsive cushioning, these shoes provide excellent support and comfort during your runs. The durable rubber outsole offers superior traction on various surfaces, making them ideal for both indoor and outdoor workouts. With its sleek design and vibrant colors, the Nike Ja 3 Scratch 3.0 is perfect for those who want to combine performance with style.",
+                    Price = 399.99,
+                    Type = Type.Right,
+                    Image = "/images/seed/niek_ja_3.avif",
+                    Rating = 4.9,
+                    Stock = 45,
+                    CategoryId = runningCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
+                new ()
+                {
+                    Title = "Nike Ja 3 Scratch 3.0",
+                    Description = "The Nike Ja 3 Scratch 3.0 is a stylish and comfortable running shoe designed for athletes and casual runners alike. Featuring a breathable mesh upper and responsive cushioning, these shoes provide excellent support and comfort during your runs. The durable rubber outsole offers superior traction on various surfaces, making them ideal for both indoor and outdoor workouts. With its sleek design and vibrant colors, the Nike Ja 3 Scratch 3.0 is perfect for those who want to combine performance with style.",
+                    Price = 399.99,
+                    Type = Type.Left,
+                    Image = "/images/seed/niek_ja_3.avif",
+                    Rating = 4.9,
+                    Stock = 45,
+                    CategoryId = runningCat.Id,
+                    CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                    Status = ProductStatus.Active
+                },
                 new()
                 {
                     Title = "Ultra Lightweight Running Shoes",
@@ -296,6 +533,31 @@ public class SeedData
                     Status = ProductStatus.Active
                 },
                 // Casual Shoes
+                new()
+                {
+                Title = "adidas Yeezy Slide Onyx",
+                Description = "The adidas Yeezy Slide Onyx is a sleek and modern slide sandal designed for comfort and style. Featuring a minimalist black design, these slides are made from lightweight EVA foam that provides cushioning and support for all-day wear. The contoured footbed ensures a secure fit, while the textured outsole offers traction on various surfaces. Perfect for casual outings or lounging at home, the Yeezy Slide Onyx combines fashion and function in one versatile package.",
+                Price = 269.99,
+                Type = Type.Right,
+                Image = "/images/seed/adidas_yeezy_slide_onyx.avif",
+                Rating = 3.7,
+                Stock = 12,
+                CategoryId = casualCat.Id,
+                CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                Status = ProductStatus.Active
+                },new()
+                {
+                Title = "adidas Yeezy Slide Onyx",
+                Description = "The adidas Yeezy Slide Onyx is a sleek and modern slide sandal designed for comfort and style. Featuring a minimalist black design, these slides are made from lightweight EVA foam that provides cushioning and support for all-day wear. The contoured footbed ensures a secure fit, while the textured outsole offers traction on various surfaces. Perfect for casual outings or lounging at home, the Yeezy Slide Onyx combines fashion and function in one versatile package.",
+                Price = 269.99,
+                Type = Type.Left,
+                Image = "/images/seed/adidas_yeezy_slide_onyx.avif",
+                Rating = 3.7,
+                Stock = 12,
+                CategoryId = casualCat.Id,
+                CreatedByUserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                Status = ProductStatus.Active
+                },
                 new()
                 {
                     Title = "Canvas Slip-On Shoes",
@@ -387,7 +649,7 @@ public class SeedData
 
             var reviews = new List<Review>();
             var random = new Random();
-            
+
             var reviewComments = new[]
             {
                 "Excellent quality! Very comfortable and durable. Highly recommend!",
@@ -417,7 +679,7 @@ public class SeedData
                 // Add 3-6 reviews per product
                 int reviewCount = random.Next(3, 7);
                 var usedCustomers = new HashSet<int>();
-                
+
                 for (int i = 0; i < reviewCount && usedCustomers.Count < customers.Count; i++)
                 {
                     int customerIndex;
@@ -425,12 +687,12 @@ public class SeedData
                     {
                         customerIndex = random.Next(customers.Count);
                     } while (usedCustomers.Contains(customerIndex));
-                    
+
                     usedCustomers.Add(customerIndex);
-                    
+
                     int rating = random.Next(3, 6); // Rating between 3-5
                     string comment = reviewComments[random.Next(reviewComments.Length)];
-                    
+
                     reviews.Add(new Review
                     {
                         ProductId = product.Id,
@@ -476,7 +738,7 @@ public class SeedData
                 // Add 3-5 FAQs per product
                 int faqCount = random.Next(3, 6);
                 var selectedFAQs = commonFAQs.OrderBy(x => random.Next()).Take(faqCount).ToList();
-                
+
                 foreach (var faq in selectedFAQs)
                 {
                     faqs.Add(new FAQ
