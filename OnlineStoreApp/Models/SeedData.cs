@@ -325,7 +325,7 @@ public class SeedData
                 new()
                 {
                     Title = "Classic White Sneakers",
-                    Description = "Comfortable and stylish white sneakers perfect for everyday wear. Made with premium materials for durability and comfort.",
+                    Description = "Aceste sneakers albe clasice sunt perfecte pentru uz zilnic, oferind un echilibru perfect între confort și stil. Realizate din materiale premium: talpă exterioară din cauciuc rezistent, talpă interioară cu suport pentru arcada piciorului, și partea superioară din material textil respirabil. Disponibile în mărimi de la 36 la 46. Garanție de 2 ani pentru defecte de fabricație. Potrivite pentru mers pe jos, activități zilnice și stil casual. Curățare ușoară cu cârpă umedă. Livrare gratuită pentru comenzi peste 200 RON.",
                     Price = 299.99,
                     Type = Type.Left,
                     Image = "/images/classic-white-sneakers.jpg",
@@ -338,7 +338,7 @@ public class SeedData
                 new()
                 {
                     Title = "Black High-Top Sneakers",
-                    Description = "Modern black high-top sneakers with excellent ankle support. Perfect for urban style and casual outings.",
+                    Description = "Sneakers negre high-top moderne cu suport excelent pentru gleznă, perfecte pentru stil urban și ieșiri casuale. Caracteristici: partea superioară din piele sintetică de înaltă calitate, talpă exterioară din cauciuc cu aderență îmbunătățită, sistem de legare rapidă, și căptușeală confortabilă. Disponibile în mărimi 36-46. Garanție 2 ani. Potrivite pentru skateboarding, mers pe jos și activități urbane. Materiale durabile și ușor de întreținut. Politică de returnare 14 zile.",
                     Price = 349.99,
                     Type = Type.Left,
                     Image = "/images/black-hightop-sneakers.jpg",
@@ -351,7 +351,7 @@ public class SeedData
                 new()
                 {
                     Title = "Retro Style Sneakers",
-                    Description = "Vintage-inspired sneakers with bold colors and classic design. Perfect for making a statement.",
+                    Description = "Sneakers cu design retro inspirat din anii '80-'90, cu culori îndrăznețe și design clasic. Perfecte pentru a face o declarație de stil. Detalii: partea superioară din material textil colorat, talpă exterioară din cauciuc cu pattern clasic, logo retro pe lateral, și confort premium. Mărimi disponibile: 36-46. Garanție 2 ani. Potrivite pentru stil casual, evenimente și colecționari. Materiale de calitate superioară. Livrare în 2-3 zile lucrătoare.",
                     Price = 279.99,
                     Type = Type.Left,
                     Image = "/images/retro-sneakers.jpg",
@@ -364,7 +364,7 @@ public class SeedData
                 new()
                 {
                     Title = "Minimalist White Sneakers",
-                    Description = "Clean and simple design with maximum comfort. Perfect for those who prefer understated elegance.",
+                    Description = "Design curat și simplu cu confort maxim. Perfecte pentru cei care preferă eleganță subtilă. Caracteristici: partea superioară din piele naturală albă, talpă exterioară din cauciuc alb, design minimalist fără logo vizibil, și confort excepțional pentru toată ziua. Mărimi: 36-46. Garanție 2 ani. Potrivite pentru birou casual, evenimente și uz zilnic. Materiale premium și durabile. Returnare gratuită în 14 zile.",
                     Price = 249.99,
                     Type = Type.Left,
                     Image = "/images/minimalist-white-sneakers.jpg",
@@ -430,7 +430,7 @@ public class SeedData
                 new()
                 {
                     Title = "Leather Ankle Boots",
-                    Description = "Premium leather ankle boots with classic design. Ideal for autumn and winter seasons.",
+                    Description = "Ghete de gleznă din piele premium cu design clasic. Ideale pentru sezonul de toamnă și iarnă. Caracteristici: piele naturală de vită de înaltă calitate, căptușeală termică pentru izolare, talpă exterioară din cauciuc cu aderență excelentă pe zăpadă și gheață, și fermoar lateral pentru ușurință în purtare. Disponibile în mărimi 36-46. Garanție 2 ani. Impermeabile, potrivite pentru ploaie și zăpadă ușoară. Întreținere: curățare cu produse speciale pentru piele. Livrare gratuită.",
                     Price = 599.99,
                     Type = Type.Left,
                     Image = "/images/leather-ankle-boots.jpg",
@@ -443,7 +443,7 @@ public class SeedData
                 new()
                 {
                     Title = "Combat Boots",
-                    Description = "Durable combat boots with rugged design. Perfect for outdoor activities and tough terrain.",
+                    Description = "Ghete combat durabile cu design robust. Perfecte pentru activități în aer liber și teren dificil. Detalii: partea superioară din piele și material textil rezistent, talpă exterioară din cauciuc cu aderență agresivă, sistem de legare rapidă, și suport excelent pentru gleznă. Mărimi: 36-46. Garanție 2 ani. Potrivite pentru hiking, camping, și activități outdoor. Rezistente la apă și durabile. Returnare în 14 zile.",
                     Price = 449.99,
                     Type = Type.Left,
                     Image = "/images/combat-boots.jpg",
@@ -456,7 +456,7 @@ public class SeedData
                 new()
                 {
                     Title = "Chelsea Boots",
-                    Description = "Elegant Chelsea boots with elastic side panels. Versatile and stylish for any occasion.",
+                    Description = "Ghete Chelsea elegante cu panouri elastice laterale. Versatil și stilat pentru orice ocazie. Caracteristici: piele naturală premium, panouri elastice pentru ușurință în purtare, talpă exterioară din cauciuc, și design clasic britanic. Mărimi disponibile: 36-46. Garanție 2 ani. Potrivite pentru birou, evenimente și stil smart casual. Materiale de calitate superioară. Livrare în 2-3 zile.",
                     Price = 529.99,
                     Type = Type.Left,
                     Image = "/images/chelsea-boots.jpg",
@@ -496,7 +496,7 @@ public class SeedData
                 new()
                 {
                     Title = "Ultra Lightweight Running Shoes",
-                    Description = "Professional running shoes with advanced cushioning technology. Designed for maximum performance and comfort.",
+                    Description = "Încălțăminte de alergare profesională cu tehnologie avansată de amortizare. Proiectate pentru performanță și confort maxim. Caracteristici: talpă exterioară din cauciuc de înaltă calitate, sistem de amortizare cu tehnologie de returnare a energiei, partea superioară din material mesh respirabil, și greutate ultra-redusă (doar 220g per pereche). Mărimi: 36-46. Garanție 2 ani. Potrivite pentru alergare pe asfalt, track și distanțe medii. Tehnologie anti-sudare și suport pentru arcada piciorului. Livrare gratuită.",
                     Price = 499.99,
                     Type = Type.Left,
                     Image = "/images/ultra-lightweight-running.jpg",
@@ -509,7 +509,7 @@ public class SeedData
                 new()
                 {
                     Title = "Trail Running Shoes",
-                    Description = "Rugged trail running shoes with excellent grip and stability. Perfect for off-road running adventures.",
+                    Description = "Încălțăminte de alergare pe trasee cu aderență excelentă și stabilitate. Perfecte pentru aventuri off-road. Detalii: talpă exterioară cu crampoane agresive pentru aderență pe pământ, piatră și noroi, protecție pentru degete, sistem de amortizare pentru teren accidentat, și materiale rezistente la apă. Mărimi disponibile: 36-46. Garanție 2 ani. Potrivite pentru trail running, hiking rapid și teren dificil. Rezistente și durabile. Returnare în 14 zile.",
                     Price = 549.99,
                     Type = Type.Left,
                     Image = "/images/trail-running-shoes.jpg",
@@ -522,7 +522,7 @@ public class SeedData
                 new()
                 {
                     Title = "Marathon Running Shoes",
-                    Description = "High-performance shoes designed for long-distance running. Lightweight with superior energy return.",
+                    Description = "Încălțăminte de performanță înaltă proiectate pentru alergare pe distanțe lungi. Ușoare cu returnare superioară a energiei. Caracteristici: tehnologie de carbon fiber pentru rigiditate și eficiență, sistem de amortizare premium pentru distanțe lungi, partea superioară ultra-respirabilă, și greutate redusă pentru performanță maximă. Mărimi: 36-46. Garanție 2 ani. Potrivite pentru maratoane, semi-maratoane și distanțe lungi. Tehnologie de vârf pentru atleți. Livrare în 2-3 zile.",
                     Price = 579.99,
                     Type = Type.Left,
                     Image = "/images/marathon-running-shoes.jpg",
@@ -561,7 +561,7 @@ public class SeedData
                 new()
                 {
                     Title = "Canvas Slip-On Shoes",
-                    Description = "Comfortable canvas slip-on shoes in various colors. Easy to wear and perfect for casual occasions.",
+                    Description = "Încălțăminte confortabilă slip-on din canvas în diverse culori. Ușor de purtat și perfectă pentru ocazii casuale. Caracteristici: partea superioară din canvas de calitate, talpă interioară confortabilă, design fără șireturi pentru ușurință, și talpă exterioară din cauciuc. Disponibile în mărimi 36-46 și multiple culori. Garanție 2 ani. Potrivite pentru plimbări, shopping și activități zilnice. Ușor de curățat și întreținut. Livrare gratuită pentru comenzi peste 150 RON.",
                     Price = 199.99,
                     Type = Type.Left,
                     Image = "/images/canvas-slipon.jpg",
@@ -574,7 +574,7 @@ public class SeedData
                 new()
                 {
                     Title = "Loafers",
-                    Description = "Classic leather loafers with timeless design. Perfect for smart casual occasions.",
+                    Description = "Loafers clasice din piele cu design atemporal. Perfecte pentru ocazii smart casual. Detalii: piele naturală premium, design fără șireturi elegant, talpă exterioară din cauciuc, și confort pentru toată ziua. Mărimi: 36-46. Garanție 2 ani. Potrivite pentru birou, întâlniri și evenimente casual elegante. Materiale de calitate superioară. Returnare gratuită în 14 zile.",
                     Price = 379.99,
                     Type = Type.Left,
                     Image = "/images/loafers.jpg",
@@ -588,7 +588,7 @@ public class SeedData
                 new()
                 {
                     Title = "Summer Beach Sandals",
-                    Description = "Lightweight and breathable sandals perfect for summer. Water-resistant and comfortable for all-day wear.",
+                    Description = "Sandale ușoare și respirabile perfecte pentru vară. Rezistente la apă și confortabile pentru purtare toată ziua. Caracteristici: material EVA ușor și flexibil, talpă exterioară din cauciuc cu aderență pe nisip și piatră, curele ajustabile, și design rapid de uscare. Mărimi: 36-46. Garanție 2 ani. Potrivite pentru plajă, piscină și activități de vară. Rezistente la apă și ușor de curățat. Livrare gratuită.",
                     Price = 149.99,
                     Type = Type.Left,
                     Image = "/images/beach-sandals.jpg",
@@ -601,7 +601,7 @@ public class SeedData
                 new()
                 {
                     Title = "Sport Sandals",
-                    Description = "Durable sport sandals with excellent grip. Perfect for hiking and outdoor activities.",
+                    Description = "Sandale sport durabile cu aderență excelentă. Perfecte pentru hiking și activități în aer liber. Detalii: curele din material sintetic rezistent, talpă exterioară cu crampoane pentru aderență, suport pentru arcada piciorului, și design ergonomic. Mărimi disponibile: 36-46. Garanție 2 ani. Potrivite pentru hiking, camping și activități outdoor. Rezistente și durabile. Returnare în 14 zile.",
                     Price = 229.99,
                     Type = Type.Left,
                     Image = "/images/sport-sandals.jpg",
@@ -615,7 +615,7 @@ public class SeedData
                 new()
                 {
                     Title = "Classic Oxford Dress Shoes",
-                    Description = "Elegant oxford dress shoes made from genuine leather. Perfect for business and formal occasions.",
+                    Description = "Încălțăminte elegantă Oxford din piele naturală autentică. Perfectă pentru afaceri și ocazii formale. Caracteristici: piele de vită de înaltă calitate, legare Oxford clasică, talpă exterioară din piele, și finisare lustruită profesională. Mărimi: 36-46. Garanție 2 ani. Potrivite pentru interviuri, evenimente formale și birou. Materiale premium și durabile. Livrare în 2-3 zile lucrătoare.",
                     Price = 699.99,
                     Type = Type.Left,
                     Image = "/images/oxford-dress-shoes.jpg",
@@ -628,7 +628,7 @@ public class SeedData
                 new()
                 {
                     Title = "Derby Shoes",
-                    Description = "Sophisticated derby shoes with open lacing system. Comfortable yet elegant for formal wear.",
+                    Description = "Încălțăminte sofisticată Derby cu sistem de legare deschis. Confortabilă dar elegantă pentru purtare formală. Detalii: piele naturală premium, legare Derby pentru confort sporit, talpă exterioară din cauciuc, și design clasic britanic. Mărimi: 36-46. Garanție 2 ani. Potrivite pentru evenimente formale, birou și ocazii speciale. Materiale de calitate superioară. Returnare gratuită în 14 zile.",
                     Price = 649.99,
                     Type = Type.Left,
                     Image = "/images/derby-shoes.jpg",
@@ -721,25 +721,122 @@ public class SeedData
 
             // Seed FAQs for products
             var faqs = new List<FAQ>();
-            var commonFAQs = new[]
+            
+            // FAQs specifice pentru fiecare categorie
+            var sneakersFAQs = new[]
+            {
+                new { Q = "Are garanție?", A = "Da, toate produsele noastre beneficiază de garanție de 2 ani pentru defecte de fabricație. Garanția acoperă defecte de materiale și de fabricație." },
+                new { Q = "Care sunt măsurile disponibile?", A = "Produsele noastre sunt disponibile în mărimi standard de la 36 la 46. Pentru mărimi speciale sau consultări despre măsură, vă rugăm să ne contactați." },
+                new { Q = "Este potrivit pentru alergare?", A = "Acest produs este proiectat pentru uz zilnic și confort. Pentru alergare profesională, recomandăm produsele specializate din categoria Running Shoes care oferă suport și amortizare superioară." },
+                new { Q = "Este impermeabil?", A = "Produsul oferă protecție de bază împotriva apei datorită materialelor utilizate, dar nu este complet impermeabil. Pentru condiții de ploaie intensă, recomandăm produse specializate." },
+                new { Q = "Cum trebuie să îl curăț?", A = "Recomandăm curățarea cu o cârpă umedă și un detergent blând. Pentru partea superioară din material textil, puteți folosi o perie moale. Evitați mașina de spălat și uscarea la soare direct pentru a preveni deteriorarea." },
+                new { Q = "Este potrivit pentru iarnă?", A = "Acest produs oferă confort și protecție de bază, dar pentru condiții de iarnă cu zăpadă și temperaturi scăzute, recomandăm produse specializate din categoria Boots cu căptușeală termică." },
+                new { Q = "Care este politica de returnare?", A = "Puteți returna produsul în termen de 14 zile de la cumpărare, în condiții originale (nevăzut, cu etichetele atașate), cu bonul fiscal. Returnarea este gratuită pentru comenzi peste 200 RON." },
+                new { Q = "Cât durează livrarea?", A = "Livrarea standard durează 2-3 zile lucrătoare. Pentru comenzi peste 200 RON, livrarea este gratuită. Oferim și opțiune de livrare express în 24 de ore (cu cost suplimentar)." },
+                new { Q = "Este potrivit pentru copii?", A = "Acest produs este recomandat pentru adulți. Mărimile disponibile (36-46) sunt pentru adulți. Pentru copii, vă recomandăm să consultați secțiunea dedicată produselor pentru copii." },
+                new { Q = "Ce materiale sunt folosite?", A = "Produsul este realizat din materiale premium: partea superioară din material textil respirabil sau piele sintetică de calitate, talpă exterioară din cauciuc rezistent, și talpă interioară cu suport pentru arcada piciorului." }
+            };
+            
+            var bootsFAQs = new[]
+            {
+                new { Q = "Are garanție?", A = "Da, toate produsele noastre beneficiază de garanție de 2 ani pentru defecte de fabricație. Garanția acoperă defecte de materiale, cusături și componente." },
+                new { Q = "Este impermeabil?", A = "Da, acest produs este impermeabil datorită materialelor premium utilizate și tratamentelor speciale aplicate. Oferă protecție excelentă împotriva apei, ploii și zăpezii ușoare." },
+                new { Q = "Este potrivit pentru iarnă?", A = "Da, acest produs este perfect pentru iarnă. Are căptușeală termică pentru izolare, talpă exterioară cu aderență excelentă pe zăpadă și gheață, și oferă protecție completă împotriva elementelor." },
+                new { Q = "Care sunt măsurile disponibile?", A = "Produsele noastre sunt disponibile în mărimi standard de la 36 la 46. Pentru mărimi speciale sau consultări, vă rugăm să ne contactați." },
+                new { Q = "Cum trebuie să îl curăț?", A = "Pentru piele naturală, folosiți produse speciale de curățare și condiționare pentru piele. Curățați cu o cârpă umedă după fiecare utilizare, mai ales pe zăpadă sau noroi. Evitați uscarea la căldură directă." },
+                new { Q = "Este potrivit pentru hiking?", A = "Da, acest produs este potrivit pentru hiking și activități outdoor. Oferă suport excelent pentru gleznă, aderență pe teren dificil, și protecție împotriva elementelor." },
+                new { Q = "Care este politica de returnare?", A = "Puteți returna produsul în termen de 14 zile de la cumpărare, în condiții originale, cu bonul fiscal. Returnarea este gratuită." },
+                new { Q = "Cât durează livrarea?", A = "Livrarea standard durează 2-3 zile lucrătoare. Oferim livrare gratuită pentru comenzi peste 200 RON și opțiune de livrare express." }
+            };
+            
+            var runningFAQs = new[]
+            {
+                new { Q = "Are garanție?", A = "Da, toate produsele noastre beneficiază de garanție de 2 ani pentru defecte de fabricație. Garanția acoperă defecte de materiale, talpă și componente." },
+                new { Q = "Este potrivit pentru alergare?", A = "Da, acest produs este special proiectat pentru alergare. Are tehnologie avansată de amortizare, suport pentru arcada piciorului, și design optimizat pentru performanță." },
+                new { Q = "Este potrivit pentru maratoane?", A = "Da, acest produs este potrivit pentru maratoane și distanțe lungi. Are tehnologie de carbon fiber pentru eficiență, sistem de amortizare premium, și greutate redusă pentru performanță maximă." },
+                new { Q = "Care sunt măsurile disponibile?", A = "Produsele noastre sunt disponibile în mărimi standard de la 36 la 46. Pentru consultări despre măsură sau mărimi speciale, vă rugăm să ne contactați." },
+                new { Q = "Cum trebuie să îl curăț?", A = "Recomandăm curățarea după fiecare utilizare cu o cârpă umedă. Pentru partea superioară din mesh, puteți folosi o perie moale. Evitați mașina de spălat și uscarea la căldură directă pentru a păstra proprietățile tehnice." },
+                new { Q = "Este potrivit pentru trail running?", A = "Acest produs este optimizat pentru alergare pe asfalt și track. Pentru trail running și teren dificil, recomandăm produsele specializate din categoria Trail Running Shoes cu crampoane și protecție suplimentară." },
+                new { Q = "Care este politica de returnare?", A = "Puteți returna produsul în termen de 14 zile de la cumpărare, în condiții originale, cu bonul fiscal. Returnarea este gratuită pentru comenzi peste 200 RON." },
+                new { Q = "Ce tehnologie de amortizare folosește?", A = "Produsul folosește tehnologie avansată de amortizare cu returnare a energiei, sistem de suport pentru arcada piciorului, și materiale premium pentru confort și performanță maximă." }
+            };
+            
+            var casualFAQs = new[]
             {
                 new { Q = "Are garanție?", A = "Da, toate produsele noastre beneficiază de garanție de 2 ani pentru defecte de fabricație." },
-                new { Q = "Este potrivit pentru copii?", A = "Acest produs este recomandat pentru adulți. Pentru copii, vă recomandăm să consultați măsurile disponibile." },
-                new { Q = "Care sunt măsurile disponibile?", A = "Produsele noastre sunt disponibile în mărimi standard de la 36 la 46. Pentru mărimi speciale, vă rugăm să ne contactați." },
-                new { Q = "Este potrivit pentru alergare?", A = "Acest produs este proiectat pentru uz zilnic și confort. Pentru alergare, recomandăm produsele din categoria Running Shoes." },
-                new { Q = "Este impermeabil?", A = "Produsul oferă protecție de bază împotriva apei, dar nu este complet impermeabil. Pentru condiții extreme, recomandăm produse specializate." },
-                new { Q = "Cum trebuie să îl curăț?", A = "Recomandăm curățarea cu o cârpă umedă și un detergent blând. Evitați mașina de spălat și uscarea la soare direct." },
-                new { Q = "Este potrivit pentru iarnă?", A = "Acest produs oferă confort și protecție de bază, dar pentru condiții de iarnă extreme, recomandăm produse specializate din categoria Boots." },
-                new { Q = "Care este politica de returnare?", A = "Puteți returna produsul în termen de 14 zile de la cumpărare, în condiții originale, cu bonul fiscal." }
+                new { Q = "Care sunt măsurile disponibile?", A = "Produsele noastre sunt disponibile în mărimi standard de la 36 la 46. Pentru consultări despre măsură, vă rugăm să ne contactați." },
+                new { Q = "Este potrivit pentru uz zilnic?", A = "Da, acest produs este perfect pentru uz zilnic. Oferă confort excelent, design versatil, și este ușor de purtat pentru activități zilnice." },
+                new { Q = "Cum trebuie să îl curăț?", A = "Pentru canvas, curățați cu o cârpă umedă și detergent blând. Pentru piele, folosiți produse speciale pentru piele. Evitați mașina de spălat și uscarea la soare direct." },
+                new { Q = "Care este politica de returnare?", A = "Puteți returna produsul în termen de 14 zile de la cumpărare, în condiții originale, cu bonul fiscal. Returnarea este gratuită pentru comenzi peste 150 RON." },
+                new { Q = "Cât durează livrarea?", A = "Livrarea standard durează 2-3 zile lucrătoare. Oferim livrare gratuită pentru comenzi peste 150 RON." }
+            };
+            
+            var sandalsFAQs = new[]
+            {
+                new { Q = "Are garanție?", A = "Da, toate produsele noastre beneficiază de garanție de 2 ani pentru defecte de fabricație." },
+                new { Q = "Este rezistent la apă?", A = "Da, acest produs este rezistent la apă datorită materialelor utilizate (EVA sau material sintetic). Se usucă rapid și este perfect pentru activități de vară." },
+                new { Q = "Este potrivit pentru plajă?", A = "Da, acest produs este perfect pentru plajă. Este rezistent la apă, se usucă rapid, are aderență excelentă pe nisip, și este ușor de curățat." },
+                new { Q = "Care sunt măsurile disponibile?", A = "Produsele noastre sunt disponibile în mărimi standard de la 36 la 46. Pentru consultări despre măsură, vă rugăm să ne contactați." },
+                new { Q = "Cum trebuie să îl curăț?", A = "Curățarea este foarte simplă: spălați cu apă și săpun, apoi lăsați să se usuce la aer. Materialele utilizate sunt ușor de întreținut și rezistente." },
+                new { Q = "Este potrivit pentru hiking?", A = "Pentru hiking și activități outdoor, recomandăm produsele specializate din categoria Sport Sandals care oferă suport suplimentar, crampoane pentru aderență, și design ergonomic." },
+                new { Q = "Care este politica de returnare?", A = "Puteți returna produsul în termen de 14 zile de la cumpărare, în condiții originale, cu bonul fiscal. Returnarea este gratuită." }
+            };
+            
+            var formalFAQs = new[]
+            {
+                new { Q = "Are garanție?", A = "Da, toate produsele noastre beneficiază de garanție de 2 ani pentru defecte de fabricație. Garanția acoperă defecte de materiale, cusături și componente." },
+                new { Q = "Care sunt măsurile disponibile?", A = "Produsele noastre sunt disponibile în mărimi standard de la 36 la 46. Pentru mărimi speciale sau consultări, vă rugăm să ne contactați." },
+                new { Q = "Este potrivit pentru evenimente formale?", A = "Da, acest produs este perfect pentru evenimente formale, interviuri, și ocazii de afaceri. Design clasic și elegant, realizat din piele naturală premium." },
+                new { Q = "Cum trebuie să îl curăț?", A = "Pentru piele naturală, folosiți produse speciale de curățare și lustruire pentru piele. Curățați regulat cu o cârpă moale și aplicați cremă pentru piele pentru a menține aspectul și durabilitatea." },
+                new { Q = "Care este politica de returnare?", A = "Puteți returna produsul în termen de 14 zile de la cumpărare, în condiții originale, cu bonul fiscal. Returnarea este gratuită." },
+                new { Q = "Cât durează livrarea?", A = "Livrarea standard durează 2-3 zile lucrătoare. Oferim și opțiune de livrare express în 24 de ore pentru evenimente urgente." },
+                new { Q = "Ce materiale sunt folosite?", A = "Produsul este realizat din piele naturală de vită de înaltă calitate, talpă exterioară din piele sau cauciuc, și finisare lustruită profesională pentru aspect elegant." }
+            };
+            
+            // FAQs comune pentru toate produsele
+            var commonFAQs = new[]
+            {
+                new { Q = "Care este politica de livrare?", A = "Oferim livrare standard în 2-3 zile lucrătoare. Livrarea este gratuită pentru comenzi peste 200 RON (sau 150 RON pentru produse casual). Oferim și livrare express în 24 de ore cu cost suplimentar." },
+                new { Q = "Pot plăti cu cardul?", A = "Da, acceptăm plăți cu cardul (Visa, Mastercard), transfer bancar, și plata la livrare (ramburs) pentru anumite zone." },
+                new { Q = "Oferiți servicii de personalizare?", A = "Momentan nu oferim servicii de personalizare, dar lucrăm la implementarea acestora. Pentru cereri speciale, vă rugăm să ne contactați." },
+                new { Q = "Cum pot contacta suportul?", A = "Puteți ne contacta prin email la support@onlinestore.ro, telefon la 0800-123-456 (luni-vineri, 9-18), sau prin formularul de contact de pe site." }
             };
 
             foreach (var product in savedProducts)
             {
-                // Add 3-5 FAQs per product
-                int faqCount = random.Next(3, 6);
-                var selectedFAQs = commonFAQs.OrderBy(x => random.Next()).Take(faqCount).ToList();
-
-                foreach (var faq in selectedFAQs)
+                // Select FAQs based on product category
+                var categoryFAQs = product.Category?.Type switch
+                {
+                    "Sneakers" => sneakersFAQs,
+                    "Boots" => bootsFAQs,
+                    "Running Shoes" => runningFAQs,
+                    "Casual Shoes" => casualFAQs,
+                    "Sandals" => sandalsFAQs,
+                    "Formal Shoes" => formalFAQs,
+                    _ => sneakersFAQs // Default to sneakers if category not found
+                };
+                
+                // Add 5-7 category-specific FAQs per product
+                int faqCount = random.Next(5, 8);
+                var selectedCategoryFAQs = categoryFAQs.OrderBy(x => random.Next()).Take(Math.Min(faqCount, categoryFAQs.Length)).ToList();
+                
+                // Add 1-2 common FAQs
+                int commonFaqCount = random.Next(1, 3);
+                var selectedCommonFAQs = commonFAQs.OrderBy(x => random.Next()).Take(commonFaqCount).ToList();
+                
+                // Combine and add all FAQs
+                foreach (var faq in selectedCategoryFAQs)
+                {
+                    faqs.Add(new FAQ
+                    {
+                        ProductId = product.Id,
+                        Question = faq.Q,
+                        Answer = faq.A,
+                        CreatedAt = DateTime.Now.AddDays(-random.Next(1, 30))
+                    });
+                }
+                
+                foreach (var faq in selectedCommonFAQs)
                 {
                     faqs.Add(new FAQ
                     {
