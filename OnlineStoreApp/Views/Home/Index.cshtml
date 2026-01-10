@@ -17,11 +17,8 @@
     <div class="row mb-5">
         <div class="col-md-8 mx-auto">
             <form asp-controller="Home" asp-action="Index" method="get" class="search-bar d-flex">
-                <input type="text"
-                       name="search"
-                       value="@ViewBag.Search"
-                       class="form-control flex-grow-1"
-                       placeholder="Search for shoes, boots, sneakers..." />
+                <input type="text" name="search" value="@ViewBag.Search" class="form-control flex-grow-1"
+                    placeholder="Search for shoes, boots, sneakers..." />
                 <button class="btn btn-primary ms-2">
                     <i class="fas fa-search me-2"></i>Search
                 </button>
@@ -137,10 +134,8 @@
 
                                 <!-- ACTION BUTTONS -->
                                 <div class="d-grid gap-2">
-                                    <a asp-controller="Products"
-                                       asp-action="Details"
-                                       asp-route-id="@product.Id"
-                                       class="btn btn-primary">
+                                    <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id"
+                                        class="btn btn-primary">
                                         View
                                     </a>
 
@@ -148,19 +143,15 @@
                                     {
                                         if (User.IsInRole("Customer"))
                                         {
-                                            <form asp-controller="Wishlist"
-                                                  asp-action="Add"
-                                                  asp-route-productId="@product.Id"
-                                                  method="post">
+                                            <form asp-controller="Wishlist" asp-action="Add" asp-route-productId="@product.Id"
+                                                method="post">
                                                 <button class="btn btn-outline-danger w-100">
                                                     ❤️ Wishlist
                                                 </button>
                                             </form>
 
-                                            <form asp-controller="Cart"
-                                                  asp-action="Add"
-                                                  asp-route-productId="@product.Id"
-                                                  method="post">
+                                            <form asp-controller="Cart" asp-action="Add" asp-route-productId="@product.Id"
+                                                method="post">
                                                 <button class="btn btn-outline-success w-100">
                                                     🛒 Add to cart
                                                 </button>
@@ -168,10 +159,8 @@
                                         }
                                         else if (User.IsInRole("Admin"))
                                         {
-                                            <a asp-controller="Products"
-                                               asp-action="Edit"
-                                               asp-route-id="@product.Id"
-                                               class="btn btn-warning w-100">
+                                            <a asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id"
+                                                class="btn btn-warning w-100">
                                                 <i class="fas fa-edit"></i> Edit in Admin Panel
                                             </a>
                                         }
@@ -184,17 +173,15 @@
                                     }
                                     else
                                     {
-                                        <a asp-area="Identity"
-                                           asp-page="/Account/Login"
-                                           asp-route-returnUrl="@Url.Action("Details", "Products", new { id = product.Id })"
-                                           class="btn btn-outline-danger w-100">
+                                        <a asp-area="Identity" asp-page="/Account/Login"
+                                            asp-route-returnUrl="@Url.Action("Details", "Products", new { id = product.Id })"
+                                            class="btn btn-outline-danger w-100">
                                             ❤️ Wishlist
                                         </a>
 
-                                        <a asp-area="Identity"
-                                           asp-page="/Account/Login"
-                                           asp-route-returnUrl="@Url.Action("Details", "Products", new { id = product.Id })"
-                                           class="btn btn-outline-success w-100">
+                                        <a asp-area="Identity" asp-page="/Account/Login"
+                                            asp-route-returnUrl="@Url.Action("Details", "Products", new { id = product.Id })"
+                                            class="btn btn-outline-success w-100">
                                             🛒 Add to cart
                                         </a>
                                     }
@@ -206,6 +193,40 @@
                     </div>
                 }
 
+                @if (ViewBag.TotalPages > 1)
+                {
+                    <nav aria-label="Page navigation" class="mt-5">
+                        <ul class="pagination justify-content-center">
+
+                            <!-- PREVIOUS -->
+                            <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)"
+                                    asp-route-category="@ViewBag.SelectedCategory" asp-route-search="@ViewBag.Search">
+                                    «
+                                </a>
+                            </li>
+
+                            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                            {
+                                <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                                    <a class="page-link" asp-action="Index" asp-route-page="@i"
+                                        asp-route-category="@ViewBag.SelectedCategory" asp-route-search="@ViewBag.Search">
+                                        @i
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- NEXT -->
+                            <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)"
+                                    asp-route-category="@ViewBag.SelectedCategory" asp-route-search="@ViewBag.Search">
+                                    »
+                                </a>
+                            </li>
+
+                        </ul>
+                    </nav>
+                }
             </div>
 
         </div>
