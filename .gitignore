@@ -66,3 +66,4 @@ nunit-*.xml
 # Images folder
 /OnlineStoreApp/wwwroot/images/*
 !/OnlineStoreApp/wwwroot/images/.gitkeep
+!/OnlineStoreApp/wwwroot/images/seed/

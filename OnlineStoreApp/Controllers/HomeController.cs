@@ -18,8 +18,10 @@ public class HomeController : Controller
         _db = db;
     }
 
-    public IActionResult Index(string category, string search, string price, string rating)
+    public IActionResult Index(string category, string search, string price, string rating, int page = 1)
     {
+        int pageSize = 4;
+
         var products = _db.Products
         .Include(p => p.Category)
         .AsQueryable();
@@ -40,11 +42,20 @@ public class HomeController : Controller
     else if (rating == "low")
         products = products.OrderBy(p => p.Rating);
 
+    var totalProducts = products.Count();
+
+    var productsToDisplay = products
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .ToList();
+
     ViewBag.Categories = _db.Categories.ToList();
     ViewBag.SelectedCategory = category;
     ViewBag.Search = search;
+    ViewBag.CurrentPage = page;
+    ViewBag.TotalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
 
-    return View(products.ToList());
+    return View(productsToDisplay);
     }
 
     [Authorize(Roles = "Admin")]
