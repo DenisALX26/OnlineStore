@@ -71,7 +71,7 @@ namespace OnlineStoreApp.Controllers
             var product = await _db.Products.FindAsync(productId);
             if (product == null)
             {
-                TempData["ErrorMessage"] = "Produsul nu a fost găsit.";
+                TempData["ErrorMessage"] = "Product not found.";
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
                     return Redirect(returnUrl);
@@ -82,7 +82,7 @@ namespace OnlineStoreApp.Controllers
             // Validate stock
             if (product.Stock < quantity)
             {
-                TempData["ErrorMessage"] = $"Stoc insuficient. Disponibil: {product.Stock} bucăți.";
+                TempData["ErrorMessage"] = $"Insufficient stock. Available: {product.Stock} items.";
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
                     return Redirect(returnUrl);
@@ -92,7 +92,7 @@ namespace OnlineStoreApp.Controllers
 
             if (quantity <= 0)
             {
-                TempData["ErrorMessage"] = "Cantitatea trebuie să fie mai mare decât 0.";
+                TempData["ErrorMessage"] = "Quantity must be greater than 0.";
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
                     return Redirect(returnUrl);
@@ -124,7 +124,7 @@ namespace OnlineStoreApp.Controllers
                 var newQuantity = existingCartProduct.Quantity + quantity;
                 if (product.Stock < newQuantity)
                 {
-                    TempData["ErrorMessage"] = $"Stoc insuficient. Disponibil: {product.Stock} bucăți. În coș: {existingCartProduct.Quantity} bucăți.";
+                    TempData["ErrorMessage"] = $"Insufficient stock. Available: {product.Stock} items. In cart: {existingCartProduct.Quantity} items.";
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
@@ -145,7 +145,7 @@ namespace OnlineStoreApp.Controllers
             }
             
             await _db.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Produsul a fost adăugat în coș cu succes!";
+            TempData["SuccessMessage"] = "Product added to cart successfully!";
 
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
             {
@@ -186,20 +186,20 @@ namespace OnlineStoreApp.Controllers
                 // Remove product if quantity is 0 or less
                 _db.CartProducts.Remove(cartProduct);
                 await _db.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Produsul a fost eliminat din coș.";
+                TempData["SuccessMessage"] = "Product removed from cart.";
                 return RedirectToAction("Index");
             }
 
             // Validate stock
             if (cartProduct.Product!.Stock < quantity)
             {
-                TempData["ErrorMessage"] = $"Stoc insuficient. Disponibil: {cartProduct.Product.Stock} bucăți.";
+                TempData["ErrorMessage"] = $"Insufficient stock. Available: {cartProduct.Product.Stock} items.";
                 return RedirectToAction("Index");
             }
 
             cartProduct.Quantity = quantity;
             await _db.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Cantitatea a fost actualizată cu succes!";
+            TempData["SuccessMessage"] = "Quantity updated successfully!";
 
             return RedirectToAction("Index");
         }
@@ -228,7 +228,7 @@ namespace OnlineStoreApp.Controllers
             {
                 _db.CartProducts.Remove(cartProduct);
                 await _db.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Produsul a fost eliminat din coș.";
+                TempData["SuccessMessage"] = "Product removed from cart.";
             }
 
             return RedirectToAction("Index");

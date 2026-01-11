@@ -45,7 +45,7 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <p class="text-muted">
-                                Propusă de <strong>@Model.Username</strong>
+                                Proposed by <strong>@Model.Username</strong>
                             </p>
                             <hr />
                         }
@@ -60,7 +60,7 @@
                         }
 
                         <div class="mb-3">
-                            <h5 class="font-weight-bold">Descriere</h5>
+                            <h5 class="font-weight-bold">Description</h5>
                             <p class="text-muted">
                                 @Model.Description
                             </p>
@@ -68,12 +68,12 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <h6 class="font-weight-bold">Preț</h6>
+                                <h6 class="font-weight-bold">Price</h6>
                                 <p>@Model.Price.ToString("0.00") RON</p>
                             </div>
 
                             <div class="col-md-6">
-                                <h6 class="font-weight-bold">Categorie</h6>
+                                <h6 class="font-weight-bold">Category</h6>
                                 <p>@Model.Category</p>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                              !string.IsNullOrEmpty(Model.RejectionReason))
                         {
                             <div class="alert alert-danger mt-4">
-                                <strong>Motiv respingere:</strong><br />
+                                <strong>Rejection reason:</strong><br />
                                 @Model.RejectionReason
                             </div>
                         }
@@ -101,7 +101,7 @@
                             <a asp-action="Edit"
                                asp-route-id="@Model.Id"
                                class="btn btn-primary">
-                                <i class="fas fa-edit"></i> Editează
+                                <i class="fas fa-edit"></i> Edit
                             </a>
                         }
 
@@ -115,14 +115,14 @@
                                       class="d-inline">
                                     <button type="submit"
                                             class="btn btn-success mr-2">
-                                        <i class="fas fa-check"></i> Aprobă
+                                        <i class="fas fa-check"></i> Approve
                                     </button>
                                 </form>
 
                                 <button class="btn btn-danger"
                                         data-toggle="modal"
                                         data-target="#rejectModal">
-                                    <i class="fas fa-times"></i> Respinge
+                                    <i class="fas fa-times"></i> Reject
                                 </button>
                             </div>
                         }
@@ -142,7 +142,7 @@
 
                 <form asp-action="Reject" method="post">
                     <div class="modal-header">
-                        <h5 class="modal-title">Respinge Propunerea</h5>
+                        <h5 class="modal-title">Reject Proposal</h5>
                         <button type="button" class="close" data-dismiss="modal">
                             <span>&times;</span>
                         </button>
@@ -153,7 +153,7 @@
 
                         <div class="form-group">
                             <label class="font-weight-bold">
-                                Motivul respingerii
+                                Rejection reason
                             </label>
                             <textarea name="reason"
                                       class="form-control"
@@ -171,7 +171,7 @@
 
                         <button type="submit"
                                 class="btn btn-danger">
-                            Respinge
+                            Reject
                         </button>
                     </div>
                 </form>

@@ -27,11 +27,11 @@
     @if (Model.CartProducts == null || !Model.CartProducts.Any())
     {
         <div class="alert alert-warning">
-            <h5>Coșul tău este gol</h5>
+            <h5>Your cart is empty</h5>
             <p>
-                Adaugă produse în coș înainte de a plasa o comandă.
+                Add products to cart before placing an order.
                 <a asp-controller="Cart" asp-action="Index" class="btn btn-primary ms-2">
-                    Vezi coșul
+                    View cart
                 </a>
             </p>
         </div>
@@ -43,7 +43,7 @@
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Produse în comandă</h5>
+                        <h5 class="mb-0">Order Items</h5>
                     </div>
                     <div class="card-body">
                         @foreach (var item in Model.CartProducts)
@@ -66,10 +66,10 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
                                             <p class="mb-1">
-                                                <strong>Cantitate:</strong> @item.Quantity bucăți
+                                                <strong>Quantity:</strong> @item.Quantity items
                                             </p>
                                             <p class="mb-0">
-                                                <strong>Preț unitar:</strong> @item.Product?.Price.ToString("0.00") RON
+                                                <strong>Unit price:</strong> @item.Product?.Price.ToString("0.00") RON
                                             </p>
                                         </div>
                                         <div class="text-end">
@@ -89,7 +89,7 @@
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">Sumar comandă</h5>
+                        <h5 class="mb-0">Order Summary</h5>
                     </div>
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3">
@@ -97,8 +97,8 @@
                             <span class="fw-bold">@Model.TotalPrice.ToString("0.00") RON</span>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
-                            <span>Livrare:</span>
-                            <span>Gratuită</span>
+                            <span>Shipping:</span>
+                            <span>Free</span>
                         </div>
                         <hr />
                         <div class="d-flex justify-content-between mb-4">
@@ -109,12 +109,12 @@
                         <form asp-controller="Orders" asp-action="PlaceOrder" method="post">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-success w-100 btn-lg">
-                                <i class="fas fa-check"></i> Plasează comanda
+                                <i class="fas fa-check"></i> Place Order
                             </button>
                         </form>
                         
                         <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-secondary w-100 mt-2">
-                            <i class="fas fa-arrow-left"></i> Înapoi la coș
+                            <i class="fas fa-arrow-left"></i> Back to cart
                         </a>
                     </div>
                 </div>

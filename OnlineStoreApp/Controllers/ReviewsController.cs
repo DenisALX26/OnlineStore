@@ -23,10 +23,10 @@ namespace OnlineStoreApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int productId, string comment, int rating, string returnUrl = null)
         {
-            // Check if user is Admin - Admins cannot leave reviews
-            if (User.IsInRole("Admin"))
+            // Check if user is Admin or Collaborator - Admins and Collaborators cannot leave reviews
+            if (User.IsInRole("Admin") || User.IsInRole("Colaborator"))
             {
-                TempData["ErrorMessage"] = "Adminii nu pot lăsa review-uri.";
+                TempData["ErrorMessage"] = "Admins cannot leave reviews.";
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
                     return Redirect(returnUrl);
@@ -44,7 +44,7 @@ namespace OnlineStoreApp.Controllers
             // Validare
             if (string.IsNullOrWhiteSpace(comment) || rating < 1 || rating > 5)
             {
-                TempData["ErrorMessage"] = "Te rugăm să completezi toate câmpurile corect.";
+                TempData["ErrorMessage"] = "Please fill in all fields correctly.";
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
                     return Redirect(returnUrl);
@@ -74,7 +74,7 @@ namespace OnlineStoreApp.Controllers
 
             if (existingReview != null)
             {
-                TempData["ErrorMessage"] = "Ai adăugat deja un review pentru acest produs. Poți edita review-ul existent.";
+                TempData["ErrorMessage"] = "You have already added a review for this product. You can edit the existing review.";
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
                     return Redirect(returnUrl);
@@ -101,7 +101,7 @@ namespace OnlineStoreApp.Controllers
             // Recalculează rating-ul produsului
             await RecalculateProductRating(productId);
 
-            TempData["SuccessMessage"] = "Review-ul tău a fost adăugat cu succes!";
+            TempData["SuccessMessage"] = "Your review has been added successfully!";
             
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
             {
@@ -133,7 +133,7 @@ namespace OnlineStoreApp.Controllers
             // Verifică dacă utilizatorul este proprietarul review-ului sau este admin
             if (review.UserId != userId && !User.IsInRole("Admin"))
             {
-                TempData["ErrorMessage"] = "Nu ai permisiunea de a șterge acest review.";
+                TempData["ErrorMessage"] = "You do not have permission to delete this review.";
                 if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 {
                     return Redirect(returnUrl);
@@ -148,7 +148,7 @@ namespace OnlineStoreApp.Controllers
             // Recalculează rating-ul produsului
             await RecalculateProductRating(productId);
 
-            TempData["SuccessMessage"] = "Review-ul a fost șters cu succes.";
+            TempData["SuccessMessage"] = "Review deleted successfully.";
 
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
             {

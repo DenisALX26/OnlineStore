@@ -38,7 +38,7 @@ namespace OnlineStoreApp.Controllers
 
             if (cart == null || cart.CartProducts == null || !cart.CartProducts.Any())
             {
-                TempData["ErrorMessage"] = "Coșul tău este gol. Adaugă produse înainte de a plasa o comandă.";
+                TempData["ErrorMessage"] = "Your cart is empty. Add products before placing an order.";
                 return RedirectToAction("Index", "Cart");
             }
 
@@ -53,13 +53,13 @@ namespace OnlineStoreApp.Controllers
 
                 if (cartProduct.Product.Stock < cartProduct.Quantity)
                 {
-                    outOfStockItems.Add($"{cartProduct.Product.Title} (Disponibil: {cartProduct.Product.Stock}, Solicitat: {cartProduct.Quantity})");
+                    outOfStockItems.Add($"{cartProduct.Product.Title} (Available: {cartProduct.Product.Stock}, Requested: {cartProduct.Quantity})");
                 }
             }
 
             if (outOfStockItems.Any())
             {
-                TempData["ErrorMessage"] = "Unele produse nu mai sunt disponibile în cantitatea solicitată:\n" + string.Join("\n", outOfStockItems);
+                TempData["ErrorMessage"] = "Some products are no longer available in the requested quantity:\n" + string.Join("\n", outOfStockItems);
                 return RedirectToAction("Index", "Cart");
             }
 
@@ -87,7 +87,7 @@ namespace OnlineStoreApp.Controllers
 
             if (cart == null || cart.CartProducts == null || !cart.CartProducts.Any())
             {
-                TempData["ErrorMessage"] = "Coșul tău este gol.";
+                TempData["ErrorMessage"] = "Your cart is empty.";
                 return RedirectToAction("Index", "Cart");
             }
 
@@ -102,13 +102,13 @@ namespace OnlineStoreApp.Controllers
 
                 if (cartProduct.Product.Stock < cartProduct.Quantity)
                 {
-                    outOfStockItems.Add($"{cartProduct.Product.Title} (Disponibil: {cartProduct.Product.Stock}, Solicitat: {cartProduct.Quantity})");
+                    outOfStockItems.Add($"{cartProduct.Product.Title} (Available: {cartProduct.Product.Stock}, Requested: {cartProduct.Quantity})");
                 }
             }
 
             if (outOfStockItems.Any())
             {
-                TempData["ErrorMessage"] = "Unele produse nu mai sunt disponibile în cantitatea solicitată:\n" + string.Join("\n", outOfStockItems);
+                TempData["ErrorMessage"] = "Some products are no longer available in the requested quantity:\n" + string.Join("\n", outOfStockItems);
                 return RedirectToAction("Index", "Cart");
             }
 
@@ -154,7 +154,7 @@ namespace OnlineStoreApp.Controllers
 
             await _db.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = $"Comanda ta a fost plasată cu succes! Total: {order.TotalPrice:F2} RON";
+            TempData["SuccessMessage"] = $"Your order has been placed successfully! Total: {order.TotalPrice:F2} RON";
             return RedirectToAction("Index", "Cart");
         }
     }
