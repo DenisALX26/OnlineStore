@@ -8,6 +8,7 @@ using OnlineStoreApp.Models;
 
 namespace OnlineStoreApp.Controllers
 {
+    [Authorize(Roles = "Admin, Colaborator")]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,7 +21,6 @@ namespace OnlineStoreApp.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin, Colaborator")]
         public IActionResult Index()
         {
             IQueryable<Product> products = _context.Products.Include(p => p.Category);
@@ -33,6 +33,7 @@ namespace OnlineStoreApp.Controllers
         }
 
         // GET: /Products/Details/5
+        [AllowAnonymous]
         public IActionResult Details(int id)
         {
             var product = _context.Products
@@ -49,6 +50,7 @@ namespace OnlineStoreApp.Controllers
             return View(product);
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             // Pre-populate dropdown with available categories
@@ -77,12 +79,21 @@ namespace OnlineStoreApp.Controllers
         }
 
         // GET Edit
+        [HttpGet]
         public IActionResult Edit(int id)
         {
-            // Caută produsul
+            var userId = _userManager.GetUserId(User);
             var product = _context.Products.Find(id);
+            
             if (product == null)
                 return NotFound();
+
+            // Verifică dacă utilizatorul are permisiunea de a edita produsul
+            // Admin poate edita orice produs, Colaborator doar propriile produse
+            if (!User.IsInRole("Admin") && product.CreatedByUserId != userId)
+            {
+                return Forbid();
+            }
 
             // Populează lista de categorii pentru dropdown
             ViewBag.Categories = _context.Categories
@@ -100,8 +111,22 @@ namespace OnlineStoreApp.Controllers
             if (id != product.Id)
                 return BadRequest();
 
+            var userId = _userManager.GetUserId(User);
+            var existingProduct = _context.Products.Find(id);
+            
+            if (existingProduct == null)
+                return NotFound();
+
+            // Verifică dacă utilizatorul are permisiunea de a edita produsul
+            if (!User.IsInRole("Admin") && existingProduct.CreatedByUserId != userId)
+            {
+                return Forbid();
+            }
+
             if (ModelState.IsValid)
             {
+                // Păstrează CreatedByUserId original (nu permite schimbarea proprietarului)
+                product.CreatedByUserId = existingProduct.CreatedByUserId;
                 _context.Products.Update(product);
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
@@ -116,14 +141,23 @@ namespace OnlineStoreApp.Controllers
         }
 
         // GET Delete
+        [HttpGet]
         public IActionResult Delete(int id)
         {
+            var userId = _userManager.GetUserId(User);
             var product = _context.Products
                 .Include(p => p.Category)
                 .FirstOrDefault(p => p.Id == id);
 
             if (product == null)
                 return NotFound();
+
+            // Verifică dacă utilizatorul are permisiunea de a șterge produsul
+            // Admin poate șterge orice produs, Colaborator doar propriile produse
+            if (!User.IsInRole("Admin") && product.CreatedByUserId != userId)
+            {
+                return Forbid();
+            }
 
             return View(product);
         }
@@ -133,8 +167,17 @@ namespace OnlineStoreApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
+            var userId = _userManager.GetUserId(User);
             var product = _context.Products.Find(id);
-            if (product == null) return NotFound();
+            
+            if (product == null) 
+                return NotFound();
+
+            // Verifică dacă utilizatorul are permisiunea de a șterge produsul
+            if (!User.IsInRole("Admin") && product.CreatedByUserId != userId)
+            {
+                return Forbid();
+            }
 
             _context.Products.Remove(product);
             _context.SaveChanges();
@@ -204,15 +247,6 @@ namespace OnlineStoreApp.Controllers
 
             if (!ModelState.IsValid)
             {
-                foreach (var e in ModelState){
-                    Console.WriteLine("Se petrece o eroare la validare:");
-                    Console.WriteLine("Se petrece o eroare la validare:");
-                    Console.WriteLine("Se petrece o eroare la validare:");
-                    Console.WriteLine("Se petrece o eroare la validare:");
-                    Console.WriteLine("Se petrece o eroare la validare:");
-                    foreach (var err in e.Value.Errors)
-                        Console.WriteLine($"{e.Key}: {err.ErrorMessage}");}
-
                 ViewBag.Categories = _context.Categories
                     .Select(c => new SelectListItem
                     {

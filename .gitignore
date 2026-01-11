@@ -25,6 +25,10 @@ bld/
 
 # Visual Studio
 .vs/
+*.user
+*.userosscache
+*.sln.docstates
+**/Properties/serviceDependencies*.json
 
 # .NET Core
 project.lock.json
@@ -59,9 +63,13 @@ nunit-*.xml
 .env
 
 *.db
-/OnlineStoreApp/Migrations/20251210141627_SyncCartProducts.cs
-/OnlineStoreApp/Migrations/20251210141627_SyncCartProducts.Designer.cs
-/OnlineStoreApp/Migrations/ApplicationDbContextModelSnapshot.cs
+*.db-shm
+*.db-wal
+
+# Visual Studio user-specific files
+*.user
+*.userosscache
+*.sln.docstates
 
 # Images folder
 /OnlineStoreApp/wwwroot/images/*

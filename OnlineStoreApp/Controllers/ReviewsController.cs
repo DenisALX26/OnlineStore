@@ -112,6 +112,7 @@ namespace OnlineStoreApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Customer, Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id, string returnUrl = null)
         {

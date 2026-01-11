@@ -1,15 +1,49 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineStoreApp.Data;
+using OnlineStoreApp.Services;
 using System.Text.RegularExpressions;
 
 namespace OnlineStoreApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AIAssistantController(ApplicationDbContext context) : ControllerBase
+    public class AIAssistantController : ControllerBase
     {
-        private readonly ApplicationDbContext _context = context;
+        private readonly ApplicationDbContext _context;
+        private readonly IAIService _aiService;
+        private readonly ILogger<AIAssistantController> _logger;
+
+        public AIAssistantController(
+            ApplicationDbContext context, 
+            IAIService aiService,
+            ILogger<AIAssistantController> logger)
+        {
+            _context = context;
+            _aiService = aiService;
+            _logger = logger;
+        }
+
+        [HttpGet("test-config")]
+        public IActionResult TestConfig()
+        {
+            var config = HttpContext.RequestServices.GetRequiredService<IConfiguration>();
+            var apiKey = config["AIService:ApiKey"];
+            var baseUrl = config["AIService:BaseUrl"];
+            var endpoint = config["AIService:Endpoint"];
+            
+            return Ok(new
+            {
+                ApiKeyConfigured = !string.IsNullOrEmpty(apiKey),
+                ApiKeyLength = apiKey?.Length ?? 0,
+                ApiKeyPrefix = apiKey?.Substring(0, Math.Min(10, apiKey?.Length ?? 0)) ?? "N/A",
+                BaseUrl = baseUrl,
+                Endpoint = endpoint,
+                Message = string.IsNullOrEmpty(apiKey) 
+                    ? "Cheia API nu este configurată. Configurează-o cu: dotnet user-secrets set \"AIService:ApiKey\" \"your-key\" --project OnlineStoreApp"
+                    : "Cheia API este configurată corect."
+            });
+        }
 
         [HttpPost("ask")]
         public async Task<IActionResult> AskQuestion([FromBody] AskQuestionRequest request)
@@ -20,6 +54,7 @@ namespace OnlineStoreApp.Controllers
             }
 
             var product = await _context.Products
+                .Include(p => p.Category)
                 .FirstOrDefaultAsync(p => p.Id == request.ProductId);
 
             if (product == null)
@@ -38,15 +73,69 @@ namespace OnlineStoreApp.Controllers
                 product.FAQs = [];
             }
 
-            var normalizedQuestion = NormalizeText(request.Question);
-            var answer = FindAnswer(product, normalizedQuestion);
+            string answer;
+
+            // Construiește contextul pentru serviciul AI
+            var context = BuildContext(product);
+
+            // Încearcă să folosească serviciul AI extern
+            try
+            {
+                answer = await _aiService.GetAnswerAsync(request.Question, context);
+                
+                // Verifică dacă răspunsul este un mesaj de eroare și folosește fallback
+                if (answer.Contains("nu este disponibil") || 
+                    answer.Contains("nu este configurat") ||
+                    answer.Contains("Quota") ||
+                    answer.Contains("quota") ||
+                    answer.Contains("Rate Limit") ||
+                    answer.Contains("temporar indisponibil"))
+                {
+                    _logger.LogInformation("Serviciul AI nu este disponibil sau quota depășită, folosind logica locală");
+                    var normalizedQuestion = NormalizeText(request.Question);
+                    answer = FindAnswer(product, normalizedQuestion);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Eroare la apelul serviciului AI, folosind logica locală");
+                // Fallback la logica locală în caz de eroare
+                var normalizedQuestion = NormalizeText(request.Question);
+                answer = FindAnswer(product, normalizedQuestion);
+            }
 
             return Ok(new { answer });
         }
 
+        private string BuildContext(Models.Product product)
+        {
+            var context = new System.Text.StringBuilder();
+            context.AppendLine($"Produs: {product.Title}");
+            context.AppendLine($"Descriere: {product.Description}");
+            context.AppendLine($"Preț: {product.Price} RON");
+            context.AppendLine($"Stoc: {product.Stock} bucăți");
+            
+            if (product.Category != null)
+            {
+                context.AppendLine($"Categorie: {product.Category.Type}");
+            }
+
+            if (product.FAQs != null && product.FAQs.Any())
+            {
+                context.AppendLine("\nÎntrebări frecvente:");
+                foreach (var faq in product.FAQs.Take(5))
+                {
+                    context.AppendLine($"Q: {faq.Question}");
+                    context.AppendLine($"A: {faq.Answer}");
+                }
+            }
+
+            return context.ToString();
+        }
+
         private static string FindAnswer(Models.Product product, string normalizedQuestion)
         {
-            // 1. Search in FAQs first
+            // cauta în FAQ-uri existente
             if (product.FAQs != null && product.FAQs.Count > 0)
             {
                 foreach (var faq in product.FAQs)
@@ -100,7 +189,6 @@ namespace OnlineStoreApp.Controllers
 
             if (ContainsKeywords(normalizedQuestion, MaterialKeywords))
             {
-                // Extract specific material information from original description
                 var productDescription = product.Description ?? "";
                 var materialInfo = ExtractMaterialInfo(productDescription, normalizedQuestion);
                 if (!string.IsNullOrEmpty(materialInfo))
@@ -108,7 +196,6 @@ namespace OnlineStoreApp.Controllers
                     return materialInfo;
                 }
                 
-                // Fallback to simple check if extraction didn't find anything
                 var normalizedDesc = NormalizeText(productDescription);
                 if (normalizedDesc.Contains("leather") || normalizedDesc.Contains("piele"))
                 {
@@ -119,19 +206,15 @@ namespace OnlineStoreApp.Controllers
                     return "Acest produs este confecționat din materiale textile de calitate, oferind confort și respirabilitate excelentă.";
                 }
             }
-
-            // Try to extract relevant information from description (use original description, not normalized)
             var productDescription2 = product.Description ?? "";
             var relevantInfo = ExtractRelevantInfo(productDescription2, normalizedQuestion, questionKeywords);
             if (!string.IsNullOrEmpty(relevantInfo))
             {
-                // Limit response length to keep it concise
                 if (relevantInfo.Length > 300)
                 {
-                    // Take first 300 characters and find the last complete sentence
                     var truncated = relevantInfo[..300];
                     var lastPeriod = truncated.LastIndexOf('.');
-                    if (lastPeriod > 200) // Only truncate at sentence boundary if it's not too short
+                    if (lastPeriod > 200) 
                     {
                         return truncated[..(lastPeriod + 1)];
                     }
@@ -207,7 +290,6 @@ namespace OnlineStoreApp.Controllers
             if (string.IsNullOrEmpty(originalDescription) || keywords.Length == 0)
                 return "";
 
-            // Split by sentences, keeping punctuation
             var sentences = SentenceSplitRegex.Split(originalDescription)
                 .Where(s => !string.IsNullOrWhiteSpace(s))
                 .Select(s => s.Trim())
@@ -216,35 +298,29 @@ namespace OnlineStoreApp.Controllers
             if (sentences.Count == 0)
                 return "";
 
-            // Expand keywords to include variations and synonyms
             var expandedKeywords = ExpandKeywords(keywords);
 
-            // Score each sentence based on keyword matches with better algorithm
             var scoredSentences = sentences.Select((sentence, index) =>
             {
                 var normalizedSentence = NormalizeText(sentence);
                 var originalSentence = sentence;
-                
-                // Calculate score based on multiple factors
+
                 double score = 0;
                 
-                // 1. Exact keyword matches (highest priority)
                 foreach (var keyword in expandedKeywords)
                 {
                     if (normalizedSentence.Contains(keyword))
                     {
-                        // Higher score for longer, more specific keywords
+
                         var keywordWeight = keyword.Length > 4 ? 3.0 : (keyword.Length > 2 ? 2.0 : 1.0);
                         score += keywordWeight;
-                        
-                        // Bonus if keyword appears multiple times
+
                         var count = Regex.Matches(normalizedSentence, Regex.Escape(keyword)).Count;
                         if (count > 1)
                             score += 0.5;
                     }
                 }
-                
-                // 2. Check for question-specific terms in the sentence
+ 
                 var questionWords = normalizedQuestion.Split(' ', StringSplitOptions.RemoveEmptyEntries)
                     .Where(w => w.Length > 3)
                     .ToList();
@@ -252,10 +328,9 @@ namespace OnlineStoreApp.Controllers
                 var matchingQuestionWords = questionWords.Count(qw => normalizedSentence.Contains(qw));
                 if (matchingQuestionWords > 0)
                 {
-                    score += matchingQuestionWords * 1.5; // Higher weight for question word matches
+                    score += matchingQuestionWords * 1.5; 
                 }
-                
-                // 3. Prefer sentences that are more specific (not too long, not too short)
+
                 if (sentence.Length > 30 && sentence.Length < 200)
                     score += 0.5;
                 
@@ -273,21 +348,18 @@ namespace OnlineStoreApp.Controllers
             if (scoredSentences.Count == 0)
                 return "";
 
-            // Take top scoring sentences (but ensure they're actually relevant)
             var topSentences = scoredSentences
-                .Where(x => x.Score >= 1.0) // Minimum relevance threshold
-                .Take(2) // Reduce to 2 most relevant sentences
+                .Where(x => x.Score >= 1.0) 
+                .Take(2) 
                 .ToList();
 
             if (topSentences.Count == 0)
                 return "";
 
-            // If we have multiple sentences, check if they're related
             if (topSentences.Count > 1)
             {
                 var indices = topSentences.Select(x => x.Index).OrderBy(i => i).ToList();
-                
-                // If sentences are consecutive or very close, include both
+
                 if (indices[1] - indices[0] <= 2)
                 {
                     var result = string.Join(" ", topSentences.OrderBy(x => x.Index).Select(x => x.Sentence)).Trim();
@@ -297,7 +369,6 @@ namespace OnlineStoreApp.Controllers
                 }
             }
 
-            // Return only the most relevant sentence
             var bestSentence = topSentences.First().Sentence.Trim();
             if (!bestSentence.EndsWith('.') && !bestSentence.EndsWith('!') && !bestSentence.EndsWith('?'))
                 bestSentence += ".";
@@ -308,8 +379,8 @@ namespace OnlineStoreApp.Controllers
         private static string[] ExpandKeywords(string[] keywords)
         {
             var expanded = new List<string>(keywords);
-            
-            // Add variations and synonyms
+
+            // variatii si sinonime pentru cuvintele cheie comune
             var synonymMap = new Dictionary<string, string[]>
             {
                 { "material", ["material", "materiale", "fabricat", "realizat", "confectionat"] },
@@ -338,7 +409,6 @@ namespace OnlineStoreApp.Controllers
                 }
             }
             
-            // Remove duplicates and return
             return [.. expanded.Distinct()];
         }
 
@@ -347,7 +417,6 @@ namespace OnlineStoreApp.Controllers
             if (string.IsNullOrEmpty(originalDescription))
                 return "";
 
-            // Use the improved extraction method with material-specific keywords
             var materialKeywords = new[] { "piele", "leather", "canvas", "textil", "cauciuc", "rubber", "material", "materials", "eva", "sintetic", "synthetic", "premium", "calitate", "fabricat", "realizat", "confectionat" };
             
             return ExtractRelevantInfo(originalDescription, normalizedQuestion, materialKeywords);

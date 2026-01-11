@@ -12,6 +12,7 @@ using OnlineStoreApp.Models;
 
 namespace OnlineStoreApp.Controllers
 {
+    [Authorize(Roles = "Admin, Colaborator")]
     public class ProposalsController : Controller
     {
 
@@ -29,7 +30,6 @@ namespace OnlineStoreApp.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin, Colaborator")]
         public IActionResult Index()
         {
             IQueryable<Proposal> proposals = _db.Proposals;
@@ -53,6 +53,7 @@ namespace OnlineStoreApp.Controllers
 
         [Authorize(Roles = "Colaborator")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Proposal proposal, IFormFile Image)
         {
             proposal.UserId = _userManager.GetUserId(User)!;
@@ -82,14 +83,6 @@ namespace OnlineStoreApp.Controllers
 
             if (!ModelState.IsValid)
             {
-                foreach (var entry in ModelState)
-                {
-                    foreach (var error in entry.Value.Errors)
-                    {
-                        Console.WriteLine("Se a intamplat o eroare la validare:");
-                        Console.WriteLine($"{entry.Key}: {error.ErrorMessage}");
-                    }
-                }
                 return View(proposal);
             }
             _db.Proposals.Add(proposal);
@@ -97,7 +90,6 @@ namespace OnlineStoreApp.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin, Colaborator")]
         public IActionResult Details(int id)
         {
             var proposal = _db.Proposals.Find(id);
@@ -110,6 +102,7 @@ namespace OnlineStoreApp.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reject(int id, string reason)
         {
             var proposal = await _db.Proposals.FindAsync(id);
@@ -158,6 +151,7 @@ namespace OnlineStoreApp.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Colaborator")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Proposal model, IFormFile? Image)
         {
             var userId = _userManager.GetUserId(User);
@@ -237,6 +231,7 @@ namespace OnlineStoreApp.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Approve(int id)
         {
             var proposal = await _db.Proposals.FirstOrDefaultAsync(p => p.Id == id);

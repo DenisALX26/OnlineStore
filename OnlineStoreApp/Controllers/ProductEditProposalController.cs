@@ -38,7 +38,7 @@ namespace OnlineStoreApp.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Approve(int id)
         {
             var proposal = await _db.ProductEditProposals
@@ -66,7 +66,7 @@ namespace OnlineStoreApp.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reject(int id, string reason)
         {
             var proposal = await _db.ProductEditProposals.FindAsync(id);
