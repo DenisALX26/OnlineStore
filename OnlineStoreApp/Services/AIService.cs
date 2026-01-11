@@ -38,13 +38,13 @@ public class AIService : IAIService
             var baseUrl = _configuration["AIService:BaseUrl"] ?? "https://api.openai.com";
             var endpoint = _configuration["AIService:Endpoint"] ?? "/v1/chat/completions";
             
-            _logger.LogInformation("Încercare apel AI Service. BaseUrl: {BaseUrl}, Endpoint: {Endpoint}, ApiKey configurată: {HasKey}", 
+            _logger.LogInformation("Attempting AI Service call. BaseUrl: {BaseUrl}, Endpoint: {Endpoint}, ApiKey configured: {HasKey}", 
                 baseUrl, endpoint, !string.IsNullOrEmpty(apiKey));
             
             if (string.IsNullOrEmpty(apiKey))
             {
-                _logger.LogWarning("Cheia API nu este configurată. Returnez răspuns default.");
-                return "Serviciul de asistent nu este disponibil momentan. Vă rugăm să încercați mai târziu.";
+                _logger.LogWarning("API key is not configured. Returning default response.");
+                return "The assistant service is currently unavailable. Please try again later.";
             }
 
             var requestBody = new
@@ -52,7 +52,7 @@ public class AIService : IAIService
                 model = _configuration["AIService:Model"] ?? "gpt-3.5-turbo",
                 messages = new[]
                 {
-                    new { role = "system", content = $"Ești un asistent virtual pentru un magazin online de încălțăminte. Context: {context}" },
+                    new { role = "system", content = $"You are a virtual assistant for an online footwear store. Context: {context}" },
                     new { role = "user", content = question }
                 },
                 max_tokens = int.Parse(_configuration["AIService:MaxTokens"] ?? "500"),
@@ -92,7 +92,7 @@ public class AIService : IAIService
             }
             
             var fullUrl = baseUrl.TrimEnd('/') + endpoint;
-            _logger.LogInformation("Trimitere request către: {Url}, ApiKey prefix: {Prefix}, AuthType: {AuthType}", 
+            _logger.LogInformation("Sending request to: {Url}, ApiKey prefix: {Prefix}, AuthType: {AuthType}", 
                 fullUrl, apiKey?.Substring(0, Math.Min(10, apiKey?.Length ?? 0)) ?? "N/A", authType);
 
             var response = await _httpClient.SendAsync(request);
@@ -110,24 +110,24 @@ public class AIService : IAIService
                     if (firstChoice.TryGetProperty("message", out var message) &&
                         message.TryGetProperty("content", out var contentElement))
                     {
-                        return contentElement.GetString() ?? "Nu am putut genera un răspuns.";
+                        return contentElement.GetString() ?? "Could not generate a response.";
                     }
                 }
 
-                _logger.LogError("Formatul răspunsului API este neașteptat: {Response}", responseContent);
-                return "Am primit un răspuns neașteptat de la serviciul de AI.";
+                _logger.LogError("Unexpected API response format: {Response}", responseContent);
+                return "Received an unexpected response from the AI service.";
             }
             else
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
-                _logger.LogError("Eroare la apelul API: {StatusCode} - {Error}. Request URL: {Url}", 
+                _logger.LogError("Error calling API: {StatusCode} - {Error}. Request URL: {Url}", 
                     response.StatusCode, errorContent, _httpClient.BaseAddress + endpoint);
                 
                 // Gestionare specifică pentru diferite tipuri de erori
                 if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    _logger.LogError("Cheia API este invalidă sau expirată. Verifică cheia API în User Secrets.");
-                    return "Cheia API este invalidă sau expirată. Te rugăm să verifici configurația sau să contactezi administratorul.";
+                    _logger.LogError("API key is invalid or expired. Check the API key in User Secrets.");
+                    return "API key is invalid or expired. Please check your configuration or contact the administrator.";
                 }
                 
                 if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests || 
@@ -145,8 +145,8 @@ public class AIService : IAIService
                                 if (errorMessage?.Contains("quota") == true || 
                                     errorMessage?.Contains("insufficient_quota") == true)
                                 {
-                                    _logger.LogWarning("Quota OpenAI depășit. Folosind logica locală ca fallback.");
-                                    return "Quota serviciului AI a fost depășită. Folosim răspunsuri locale.";
+                                    _logger.LogWarning("OpenAI quota exceeded. Using local logic as fallback.");
+                                    return "AI service quota has been exceeded. Using local responses.";
                                 }
                             }
                         }
@@ -156,23 +156,23 @@ public class AIService : IAIService
                         // Dacă nu putem parsa JSON-ul, continuăm cu mesajul generic
                     }
                     
-                    _logger.LogWarning("Prea multe cereri către serviciul AI (Rate Limit). Folosind logica locală ca fallback.");
-                    return "Serviciul AI este temporar indisponibil din cauza limitelor de utilizare. Folosim răspunsuri locale.";
+                    _logger.LogWarning("Too many requests to AI service (Rate Limit). Using local logic as fallback.");
+                    return "AI service is temporarily unavailable due to usage limits. Using local responses.";
                 }
                 
                 // Returnează un mesaj mai specific pentru debugging
-                return $"Nu am putut obține un răspuns de la serviciul de AI (Status: {response.StatusCode}). Vă rugăm să încercați mai târziu.";
+                return $"Could not get a response from the AI service (Status: {response.StatusCode}). Please try again later.";
             }
         }
         catch (HttpRequestException ex)
         {
-            _logger.LogError(ex, "Eroare de rețea la apelul serviciului AI");
-            return "Eroare de conexiune la serviciul de AI. Vă rugăm să încercați mai târziu.";
+            _logger.LogError(ex, "Network error calling AI service");
+            return "Connection error to the AI service. Please try again later.";
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Eroare neașteptată în serviciul AI");
-            return "A apărut o eroare neașteptată. Vă rugăm să încercați mai târziu.";
+            _logger.LogError(ex, "Unexpected error in AI service");
+            return "An unexpected error occurred. Please try again later.";
         }
     }
 }
