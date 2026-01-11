@@ -6,6 +6,7 @@ using OnlineStoreApp.Models;
 
 namespace OnlineStoreApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -16,7 +17,6 @@ namespace OnlineStoreApp.Controllers
         }
 
         [HttpGet("categories")]
-        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             var categories = _db.Categories.ToList();
@@ -24,7 +24,7 @@ namespace OnlineStoreApp.Controllers
         }
 
         [HttpPost("create-category")]
-        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Category model)
         {
             if (!ModelState.IsValid)
@@ -45,14 +45,12 @@ namespace OnlineStoreApp.Controllers
         }
 
         [HttpGet("create-category")]
-        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpGet("edit-category")]
-        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             var category = _db.Categories.FirstOrDefault(c => c.Id == id);
@@ -64,7 +62,7 @@ namespace OnlineStoreApp.Controllers
         }
 
         [HttpPost("edit-category")]
-        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(Category category)
         {
             if (!ModelState.IsValid)
@@ -79,7 +77,6 @@ namespace OnlineStoreApp.Controllers
         }
 
         [HttpGet("delete-category")]
-        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var category = _db.Categories.FirstOrDefault(c => c.Id == id);
@@ -91,7 +88,7 @@ namespace OnlineStoreApp.Controllers
         }
 
         [HttpPost("delete-category")]
-        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public IActionResult DeleteMethod(int id)
         {
             var category = _db.Categories.FirstOrDefault(c => c.Id == id);

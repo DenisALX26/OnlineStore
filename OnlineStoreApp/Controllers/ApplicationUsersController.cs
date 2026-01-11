@@ -6,6 +6,7 @@ using OnlineStoreApp.Models;
 
 namespace OnlineStoreApp.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ApplicationUsersController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -19,7 +20,6 @@ namespace OnlineStoreApp.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var users = _db.Users.ToList();
@@ -27,7 +27,7 @@ namespace OnlineStoreApp.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeRole(string userId, string newRole)
         {
             var user = await _userManager.FindByIdAsync(userId);
